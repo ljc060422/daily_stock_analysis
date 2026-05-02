@@ -138,7 +138,8 @@ def parse_report(md_text):
     summary_section = re.search(r"## 📊 分析结果摘要\s*\n(.*?)(?=\n---)", md_text, re.DOTALL)
     if summary_section:
         for line in summary_section.group(1).strip().split("\n"):
-            m2 = re.match(r"(\S+)\s+\*{0,2}(.+?)\*{0,2}\s+[|：:]\s*(买入|卖出|持有|观望|持有观望|减仓).*?评分\s*(\d+)", line)
+            # Format: 🟢 **钒钛股份(000629)**: 买入 | 评分 79 | 强烈看多
+            m2 = re.match(r"(\S+)\s+\*{0,2}(.+?)\*{0,2}\s*[：:]\s*(买入|卖出|持有|持有观望|观望|减仓)\s*.*?评分\s*(\d+)", line)
             if m2:
                 result["stocks_summary"].append({"signal":m2.group(1),"name":m2.group(2).strip(),"action":m2.group(3),"score":int(m2.group(4))})
     sections = re.split(r"\n## (?:🟢|🟡|🔴|⚪|🟠)\s", md_text)
@@ -152,7 +153,7 @@ def parse_report(md_text):
         d = {"name":name, "code":code}
         def ext(pattern, text=sec, default="", group=1):
             m = re.search(pattern, text); return m.group(group).strip() if m else default
-        d["decision"] = ext(r"\*\*(买入|卖出|持有|观望|减仓)\*\*")
+        d["decision"] = ext(r"\*\*[🟢🟡🔴⚪🟠]*\s*(买入|卖出|持有|减仓|观望|持有观望)\*\*")
         d["sentiment"] = ext(r"\*\*(强烈看多|看多|震荡|看空|强烈看空|震荡偏空)\*\*")
         d["one_liner"] = ext(r"一句话决策[:：]\*\*(.+?)\n")
         d["trend_strength"] = ext(r"趋势强度[:：]\s*(\d+/\d+)")
