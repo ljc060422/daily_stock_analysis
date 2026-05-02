@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"></head><body>
+<h3>Diagnose</h3>
+<button onclick="test()">Test API</button>
+<pre id="log"></pre>
+<script>
+var T = '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';
+async function test() {
+    var log = document.getElementById('log');
+    log.textContent = '';
+    var u = 'https://api.github.com/repos/ljc060422/daily_stock_analysis/contents/stock_list.txt';
+    try {
+        log.textContent += '1. Fetching...\n';
+        var r = await fetch(u, {headers:{'Authorization':'Bearer '+T, 'Accept':'application/vnd.github+json'}});
+        log.textContent += '2. Status: ' + r.status + '\n';
+        var t = await r.text();
+        log.textContent += '3. Body: ' + t.substring(0, 200) + '\n';
+    } catch(e) {
+        log.textContent += 'ERROR: ' + e.name + ': ' + e.message + '\n';
+    }
+}
+</script>
+</body></html>
