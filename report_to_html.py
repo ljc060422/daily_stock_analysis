@@ -279,83 +279,123 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 '''
 
 JS = '''
-window._stocksJson = null;
-window._trackedCodes = new Set(TRACKED_CODES);
-window._loadStocks = async function() {
-    if (window._stocksJson) return window._stocksJson;
-    var resp = await fetch('stocks.json');
-    if (resp.ok) { window._stocksJson = await resp.json(); return window._stocksJson; }
-    return [];
-};
-window._searchTimeout = null;
-window._doSearch = async function(q) {
-    if (q.length < 1) { document.getElementById('search-results').innerHTML = ''; return; }
-    var stocks = await window._loadStocks();
-    var results = [];
-    var ql = q.toLowerCase();
-    for (var i = 0; i < stocks.length && results.length < 20; i++) {
-        var s = stocks[i];
-        if (s.c.indexOf(q) === 0 || s.n.indexOf(q) >= 0 || (s.p && s.p.indexOf(ql) >= 0)) {
-            results.push(s);
-        }
+(function() {
+    var TRACKED_SET = {};
+    for (var i = 0; i < TRACKED_CODES.length; i++) { TRACKED_SET[TRACKED_CODES[i]] = true; }
+    var stockCache = null;
+    var searchTimer = null;
+    var chartCache = {};
+
+    function loadStocks(cb) {
+        if (stockCache) { cb(stockCache); return; }
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'stocks.json', true);
+        xhr.onload = function() {
+            if (xhr.status === 200) { stockCache = JSON.parse(xhr.responseText); cb(stockCache); }
+            else { cb([]); }
+        };
+        xhr.onerror = function() { cb([]); };
+        xhr.send();
     }
-    var html = '';
-    if (results.length === 0) {
-        html = '<div class="no-results">未找到匹配股票</div>';
-    } else {
-        for (var j = 0; j < results.length; j++) {
-            var r = results[j];
-            var tracked = window._trackedCodes.has(r.c);
-            html += '<div class="search-item' + (tracked ? ' tracked' : '') + '" onclick="alert(\'股票 ' + r.n + '(' + r.c + ')\\n' + (tracked ? '已在关注列表中' : '待添加至关注列表\\n请在 GitHub Secrets 中更新 STOCK_LIST') + '")"><div><div>' + r.n + '</div><div class="si-code">' + r.c + '</div></div>' + (tracked ? '<span class="si-badge">已关注</span>' : '<span style="color:#64748b;font-size:11px">未关注</span>') + '</div>';
-        }
-    }
-    document.getElementById('search-results').innerHTML = html;
-};
-window._onSearchInput = function(el) {
-    clearTimeout(window._searchTimeout);
-    window._searchTimeout = setTimeout(function() { window._doSearch(el.value.trim()); }, 200);
-};
-window._chartCache = {};
-window._loadChart = async function(code, type) {
-    var key = code + '_' + type;
-    if (window._chartCache[key]) return window._chartCache[key];
-    var resp = await fetch('charts/' + code + '_' + type + '.png');
-    if (resp.ok) {
-        var blob = await resp.blob();
-        var url = URL.createObjectURL(blob);
-        window._chartCache[key] = url;
-        return url;
-    }
-    return null;
-};
-window._renderCharts = function(code) {
-    var kd = document.getElementById('kline-' + code);
-    var id = document.getElementById('itraday-' + code);
-    if (kd && !kd.querySelector('img')) {
-        window._loadChart(code, 'kline').then(function(u) {
-            kd.innerHTML = u ? '<img src="'+u+'" alt="K线">' : '<div class="chart-loading">暂无K线数据</div>';
+
+    function doSearch(q) {
+        var div = document.getElementById('search-results');
+        if (!div) return;
+        if (q.length < 1) { div.innerHTML = ''; div.style.display = 'none'; return; }
+        loadStocks(function(stocks) {
+            var results = [], ql = q.toLowerCase();
+            for (var i = 0; i < stocks.length && results.length < 20; i++) {
+                var s = stocks[i];
+                if (s.c.indexOf(q) === 0 || s.n.indexOf(q) >= 0 || (s.p && s.p.indexOf(ql) >= 0)) {
+                    results.push(s);
+                }
+            }
+            if (results.length === 0) {
+                div.innerHTML = '<div class="no-results">未找到匹配股票</div>';
+            } else {
+                var html = '';
+                for (var j = 0; j < results.length; j++) {
+                    var r = results[j], tracked = TRACKED_SET[r.c];
+                    html += '<div class=\"search-item' + (tracked ? ' tracked' : '') + '\" onclick=\"showStockInfo(this)\" data-code=\"' + r.c + '\" data-name=\"' + r.n + '\" data-tracked=\"' + (tracked ? '1' : '0') + '\"><div><div>' + r.n + '</div><div class=\"si-code\">' + r.c + '</div></div>' + (tracked ? '<span class=\"si-badge\">已关注</span>' : '<span style=\"color:#64748b;font-size:11px\">未关注</span>') + '</div>';
+                }
+                div.innerHTML = html;
+            }
+            div.style.display = 'block';
         });
     }
-    if (id && !id.querySelector('img')) {
-        window._loadChart(code, 'intraday').then(function(u) {
-            id.innerHTML = u ? '<img src="'+u+'" alt="分时">' : '<div class="chart-loading">暂无分时数据</div>';
-        });
+
+    window.showStockInfo = function(el) {
+        var name = el.getAttribute('data-name');
+        var code = el.getAttribute('data-code');
+        var tracked = el.getAttribute('data-tracked') === '1';
+        var msg = name + ' (' + code + ')\\n\\n';
+        msg += tracked ? '已在当前关注列表中' : '未在关注列表中\\n如需添加，请在 GitHub Secrets 中更新 STOCK_LIST';
+        // Try to scroll to detail if tracked
+        if (tracked) {
+            var detail = document.getElementById('stock-' + code);
+            if (detail) {
+                window.toggleDetail('stock-' + code);
+                document.getElementById('search-results').style.display = 'none';
+                document.getElementById('search-input').value = '';
+                return;
+            }
+        }
+        alert(msg);
+    };
+
+    window.onSearchInput = function(el) {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function() { doSearch(el.value.trim()); }, 200);
+    };
+
+    window.onSearchKey = function(el, evt) {
+        if (evt.key === 'Enter') {
+            clearTimeout(searchTimer);
+            doSearch(el.value.trim());
+        }
+    };
+
+    function loadChart(code, type, cb) {
+        var key = code + '_' + type;
+        if (chartCache[key]) { cb(chartCache[key]); return; }
+        var img = new Image();
+        img.onload = function() { chartCache[key] = img.src; cb(img.src); };
+        img.onerror = function() { cb(null); };
+        img.src = 'charts/' + code + '_' + type + '.png';
     }
-};
-function toggleDetail(id) {
-    var el = document.getElementById(id);
-    var icon = document.getElementById('icon-' + id);
-    var code = id.replace('stock-', '');
-    if (el.style.display === 'none') {
-        el.style.display = 'block';
-        if (icon) icon.classList.add('open');
-        window._renderCharts(code);
-        el.scrollIntoView({behavior:'smooth',block:'center'});
-    } else {
-        el.style.display = 'none';
-        if (icon) icon.classList.remove('open');
+
+    function renderCharts(code) {
+        var kd = document.getElementById('kline-' + code);
+        if (kd && !kd.querySelector('img')) {
+            loadChart(code, 'kline', function(u) {
+                kd.innerHTML = u ? '<img src=\"' + u + '\" alt=\"K线\">' : '<div class=\"chart-loading\">暂无K线数据</div>';
+            });
+        }
+        var idEl = document.getElementById('itraday-' + code);
+        if (idEl && !idEl.querySelector('img')) {
+            loadChart(code, 'intraday', function(u) {
+                idEl.innerHTML = u ? '<img src=\"' + u + '\" alt=\"分时\">' : '<div class=\"chart-loading\">暂无分时数据</div>';
+            });
+        }
     }
-}
+
+    window.toggleDetail = function(id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var icon = document.getElementById('icon-' + id);
+        var code = id.replace('stock-', '');
+        var nowHidden = (el.style.display === 'none' || el.style.display === '');
+        if (nowHidden) {
+            el.style.display = 'block';
+            if (icon) icon.classList.add('open');
+            renderCharts(code);
+            setTimeout(function() { el.scrollIntoView({behavior:'smooth',block:'center'}); }, 100);
+        } else {
+            el.style.display = 'none';
+            if (icon) icon.classList.remove('open');
+        }
+    };
+})();
 '''
 
 def signal_color(action):
@@ -379,7 +419,7 @@ def generate_html(data):
         color = signal_color(s.get("action", ""))
         code = s.get("code", "")
         name = html_escape(s["name"])
-        summary_cards.append('''<div class="stock-card" style="border-left:4px solid '''+color+'''" onclick="toggleDetail('stock-'''+code+'''')">
+        summary_cards.append('''<div class="stock-card" style="border-left:4px solid '''+color+'''" onclick="window.toggleDetail('stock-'''+code+'''')">
           <div class="card-left"><div class="card-name">'''+name+'''</div><div class="card-code">'''+code+'''</div></div>
           <div class="card-center"><span class="badge" style="background:'''+color+'''">'''+s["action"]+'''</span></div>
           <div class="card-right"><div class="score" style="color:'''+color+'''">'''+str(s["score"])+'''</div><div class="score-label">评分</div></div>
@@ -446,7 +486,7 @@ def generate_html(data):
                 info_rows.append('<div class="info-row"><span>'+key_label+'</span><span>'+html_escape(val)+'</span></div>')
 
         detail_sections.append('''<div class="detail-section" id="stock-'''+code+'''" style="display:none">
-          <div class="detail-header" style="background:'''+color+'''" onclick="toggleDetail('stock-'''+code+'''')">
+          <div class="detail-header" style="background:'''+color+'''" onclick="window.toggleDetail('stock-'''+code+'''')">
             <div>
               <div class="detail-title">'''+name+'''</div>
               <div class="detail-code">'''+code+'''</div>
@@ -484,8 +524,8 @@ def generate_html(data):
 <body>
 <div class="header"><h1>📊 股票日报</h1><div class="date">'''+data["date"]+'''</div></div>
 <div class="search-bar">
-  <input type="text" class="search-input" placeholder="🔍 搜索股票（代码/名称/拼音）..." oninput="window._onSearchInput(this)" onfocus="this.placeholder='输入代码或名称...'" onblur="this.placeholder='🔍 搜索股票（代码/名称/拼音）...'">
-  <div id="search-results"></div>
+  <input type="text" id="search-input" class="search-input" placeholder="🔍 搜索股票（代码/名称/拼音）..." oninput="window.onSearchInput(this)" onkeydown="window.onSearchKey(this,event)" autocomplete="off">
+  <div id="search-results" style="display:none"></div>
 </div>
 <div class="stats">
   <div class="stat buy"><div class="num">'''+str(summary.get("buy",0))+'''</div><div class="label">🟢 买入</div></div>
