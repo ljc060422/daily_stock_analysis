@@ -539,9 +539,10 @@ def generate_html(data):
   <p>数据来源：东方财富 · 腾讯财经 | AI：DeepSeek</p>
   <p>仅供参考，不构成投资建议</p>
 </div>
-<script>
+<script>var GH_TOKEN = \"TOKEN_PLACEHOLDER\";
 var TRACKED_CODES = [''' + ','.join("'" + s.get('code','') + "'" for s in stocks_summary) + '''];
 ''' + JS + '''</script>
+<script src="add_stock.js"></script>
 </body>
 </html>'''
 
@@ -588,8 +589,19 @@ if __name__ == "__main__":
     html = generate_html(data)
 
     out_path = os.path.join(base_dir, "index.html")
+    token = os.environ.get('GH_PAT_TOKEN', '')
+    html = html.replace('TOKEN_PLACEHOLDER', token)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
+
+    # Copy add_stock.js
+    src_js = os.path.join(os.path.dirname(os.path.abspath(__file__)), "reports", "add_stock.js")
+    if os.path.exists(src_js):
+        dst_js = os.path.join(base_dir, "add_stock.js")
+        with open(src_js, 'r', encoding='utf-8') as fsrc:
+            with open(dst_js, 'w', encoding='utf-8') as fdst:
+                fdst.write(fsrc.read())
+        print(f"add_stock.js copied to {base_dir}")
 
     print(f"\nDone! HTML: {out_path}")
     print(f"Charts: {charts_dir}")
