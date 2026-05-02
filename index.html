@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>股票日报 2026-05-02</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:#0f172a; color:#e2e8f0; min-height:100vh; padding-bottom:40px; }
+.header { background: linear-gradient(135deg,#1e293b,#0f172a); padding:24px 16px 20px; text-align:center; border-bottom:1px solid #1e293b; }
+.header h1 { font-size:20px; font-weight:700; margin-bottom:4px; }
+.header .date { font-size:13px; color:#64748b; }
+.stats { display:flex; justify-content:center; gap:12px; padding:16px; flex-wrap:wrap; }
+.stat { background:#1e293b; border-radius:12px; padding:12px 16px; text-align:center; min-width:60px; }
+.stat .num { font-size:24px; font-weight:800; }
+.stat .label { font-size:11px; color:#94a3b8; margin-top:2px; }
+.stat.buy .num { color:#10b981; }
+.stat.hold .num { color:#eab308; }
+.stat.sell .num { color:#ef4444; }
+.cards { padding:0 12px; }
+.stock-card { display:flex; align-items:center; background:#1e293b; border-radius:12px; margin-bottom:8px; padding:14px 12px; text-decoration:none; color:inherit; }
+.stock-card:active { background:#334155; }
+.card-left { flex:1; min-width:0; }
+.card-name { font-size:15px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.card-code { font-size:12px; color:#64748b; }
+.card-center { margin:0 10px; }
+.badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600; color:#fff; white-space:nowrap; }
+.card-right { text-align:center; min-width:44px; }
+.score { font-size:22px; font-weight:800; }
+.score-label { font-size:10px; color:#64748b; }
+
+.detail-section { margin:12px 12px 0; background:#1e293b; border-radius:12px; overflow:hidden; }
+.detail-header { display:flex; justify-content:space-between; align-items:center; padding:16px; color:#fff; }
+.detail-title { font-size:17px; font-weight:700; }
+.detail-code { font-size:12px; opacity:0.8; }
+.detail-price { font-size:22px; font-weight:800; text-align:right; }
+.detail-change { font-size:13px; text-align:right; }
+.detail-body { padding:16px; }
+.one-liner { font-size:14px; color:#94a3b8; margin-bottom:14px; line-height:1.5; }
+.kpi-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.kpi { background:#0f172a; border-radius:8px; padding:10px 12px; }
+.kpi-label { display:block; font-size:11px; color:#64748b; }
+.kpi-value { display:block; font-size:14px; font-weight:600; margin-top:2px; }
+.op-row { display:flex; justify-content:space-between; padding:10px 12px; background:#0f172a; border-radius:8px; margin-bottom:6px; font-size:13px; }
+.op-label { color:#64748b; }
+.op-text { text-align:right; flex:1; margin-left:12px; }
+.checks-list { font-size:12px; color:#94a3b8; padding-left:18px; line-height:1.8; }
+.footer { text-align:center; padding:20px; font-size:12px; color:#475569; }
+.footer a { color:#64748b; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 股票日报</h1>
+  <div class="date">2026-05-02</div>
+</div>
+
+<div class="stats">
+  <div class="stat buy"><div class="num">3</div><div class="label">🟢 买入</div></div>
+  <div class="stat hold"><div class="num">8</div><div class="label">🟡 观望</div></div>
+  <div class="stat sell"><div class="num">2</div><div class="label">🔴 卖出</div></div>
+</div>
+
+<div class="cards">
+
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #10b981">
+          <div class="card-left">
+            <div class="card-name">钒钛股份(000629)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#10b981">买入</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#10b981">79</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #10b981">
+          <div class="card-left">
+            <div class="card-name">立讯精密(002475)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#10b981">买入</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#10b981">77</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #10b981">
+          <div class="card-left">
+            <div class="card-name">滨化股份(601678)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#10b981">买入</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#10b981">68</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #eab308">
+          <div class="card-left">
+            <div class="card-name">华电能源(600726)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#eab308">持有</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#eab308">60</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #9ca3af">
+          <div class="card-left">
+            <div class="card-name">天赐材料(002709)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#9ca3af">观望</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#9ca3af">58</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #eab308">
+          <div class="card-left">
+            <div class="card-name">韶能股份(000601)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#eab308">持有</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#eab308">50</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #eab308">
+          <div class="card-left">
+            <div class="card-name">驰宏锌锗(600497)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#eab308">持有</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#eab308">50</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #eab308">
+          <div class="card-left">
+            <div class="card-name">莱茵生物(002166)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#eab308">持有</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#eab308">45</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #eab308">
+          <div class="card-left">
+            <div class="card-name">铜陵有色(000630)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#eab308">持有</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#eab308">45</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #eab308">
+          <div class="card-left">
+            <div class="card-name">神剑股份(002361)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#eab308">持有</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#eab308">42</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #ef4444">
+          <div class="card-left">
+            <div class="card-name">包钢股份(600010)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#ef4444">卖出</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#ef4444">39</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #9ca3af">
+          <div class="card-left">
+            <div class="card-name">众泰汽车(000980)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#9ca3af">观望</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#9ca3af">35</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+        <a href="#stock-" class="stock-card" style="border-left: 4px solid #ef4444">
+          <div class="card-left">
+            <div class="card-name">豫能控股(001896)</div>
+            <div class="card-code"></div>
+          </div>
+          <div class="card-center">
+            <span class="badge" style="background:#ef4444">卖出</span>
+          </div>
+          <div class="card-right">
+            <div class="score" style="color:#ef4444">25</div>
+            <div class="score-label">评分</div>
+          </div>
+        </a>
+</div>
+
+<div class="section-title" style="padding:20px 16px 8px; font-size:16px; font-weight:700;">📋 个股详情</div>
+
+        <div class="detail-section" id="stock-000629">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">钒钛股份</div>
+              <div class="detail-code">000629</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">✅ 是</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">90/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥3.636</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：现价3.64元附近可首次建仓2成，在MA10（3.56元）附近加仓至4成。</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：持股为主，若回踩MA5不破可适当加仓1成，仓位保持3-4成。</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列（MA5>MA10>MA20）</li><li>检查项2：乖离率合理（+0.11%＜5%）</li><li>检查项3：量能配合（缩量回调）</li><li>检查项4：无重大利空（时间窗口无负面消息）</li><li>检查项5：筹码健康（集中度12%，获利比例65%）</li><li>检查项6：PE估值偏高（441.75倍），需谨慎对待</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-002475">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">立讯精密</div>
+              <div class="detail-code">002475</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">MA5(68.70) > MA10(67</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">75/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥68.698</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：当前价格67.0元附近可轻仓试仓，严格止损</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：继续持有，若回踩MA10企稳可加仓</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列（MA5>MA10>MA20）</li><li>检查项2：乖离率合理（-2.47% < 5%，安全）</li><li>检查项3：量能配合（缩量回调）</li><li>检查项4：无重大个股利空，但行业有美对华科技打压风险</li><li>检查项5：筹码结构数据缺失，无法评估</li><li>检查项6：PE 28.36，相对合理</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-601678">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">滨化股份</div>
+              <div class="detail-code">601678</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">✅ 是</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">75/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥5.228</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：可小仓介入，关注回踩MA5（5.23元）附近的低吸机会，仓位不超过2成。</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：继续持有，以MA20（5.10元）作为防守位，若跌破考虑减仓。</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列 MA5>MA10>MA20</li><li>检查项2：乖离率+2.33% < 5%，安全范围</li><li>检查项3：量能配合（放量但异常倍数需警惕）</li><li>检查项4：无重大利空（一季报利好）</li><li>检查项5：筹码结构数据缺失，无法评估</li><li>检查项6：PE 39.91倍偏高，需注意估值压力</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-600726">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">华电能源</div>
+              <div class="detail-code">600726</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">✅ 是</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">85/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥6.578</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：不急于介入，等待缩量回踩MA5支撑确认或企稳信号出现后再考虑。</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：关注MA5（6.58元）支撑，若跌破则减仓或止损6.30元；若不破可继续持有观察。</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列（MA5>MA10>MA20）</li><li>检查项2：乖离率合理（+0.18%<5%，安全）</li><li>检查项3：量能配合（放量下跌，非理想状态）</li><li>检查项4：无重大利空（消息面平静）</li><li>检查项5：筹码健康（数据缺失，无法判断）</li><li>检查项6：PE估值合理（160.48，明显偏高）</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-002709">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">天赐材料</div>
+              <div class="detail-code">002709</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">✅ 是</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">90/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥56.29</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：当前乖离率7.49%超过5%，严禁追高。等待股价回踩MA5（56.29元）或MA10（53.27元）附近再考虑介入。</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：趋势强劲可继续持有，但注意RSI超买（74.2），短期有回调风险，可适当减仓锁定利润，将止损上移至MA20（49.53元）。</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列（MA5>MA10>MA20）</li><li>检查项2：乖离率合理（7.49%>5%，违反严进策略）</li><li>检查项3：量能配合（量比1.18，平量，可接受但不强）</li><li>检查项4：无重大利空（未发现减持、处罚等）</li><li>检查项5：筹码健康（数据缺失，暂无法判断）</li><li>检查项6：PE估值合理（PE43.03偏高，需关注）</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-000601">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">韶能股份</div>
+              <div class="detail-code">000601</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">❌ 否</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">40/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥6.77</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：暂不介入，等待均线形成明确多头排列或回踩MA20企稳后再考虑</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：当前跌破MA5但仍在MA20上方，缩量回调属正常调整，可继续持有，设好止损于MA20（6.71元）</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列（MA5>MA10>MA20）—— 不满足，MA10>MA5>MA20</li><li>检查项2：乖离率合理（-2.95%<5%），安全</li><li>检查项3：量能配合（缩量回调）</li><li>检查项4：无重大利空（但近3日无消息，需警惕突发风险）</li><li>检查项5：筹码健康（数据缺失，无法判断）</li><li>检查项6：PE估值合理（70.24倍偏高，需谨慎）</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-600497">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">驰宏锌锗</div>
+              <div class="detail-code">600497</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">❌ 否</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">50/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥8.982</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：暂时观望，等待MA5重新站上MA10且量能配合时再考虑介入</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：可在MA5附近轻仓持有，跌破MA20（8.60元）则减仓</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列（MA5<MA10，不满足）</li><li>检查项2：乖离率合理（-0.02%，安全）</li><li>检查项3：量能配合（缩量回调）</li><li>检查项4：无重大利空（近3日无明显利空）</li><li>检查项5：筹码数据缺失，无法判断</li><li>检查项6：PE估值37.63偏高，需关注</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-002166">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">莱茵生物</div>
+              <div class="detail-code">002166</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">❌ 否</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">25/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥8.652</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：均线空头排列，不宜介入，等待MA5>MA10>MA20形成多头后再考虑</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：若价格跌破MA5（8.65元）则减仓，否则继续持有观察，反弹至MA20（8.92元）附近可考虑减仓</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列</li><li>检查项2：乖离率合理（1.48%）</li><li>检查项3：量能配合（异常放大需警惕）</li><li>检查项4：无重大利空</li><li>检查项5：筹码健康（数据缺失）</li><li>检查项6：PE估值42.05，偏高</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-000630">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">铜陵有色</div>
+              <div class="detail-code">000630</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">❌ 否</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">40/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥6.26</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：暂不介入，等待MA5重新金叉MA10或放量突破6.30元再考虑。</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：若已持有可继续持有，但需设止损于5.95元（跌破MA20），反弹至6.35附近可适当减仓。</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列 (MA5<MA10，不满足)</li><li>检查项2：乖离率合理（-1.76%，安全）</li><li>检查项3：量能配合（下跌放量异常，需谨慎）</li><li>检查项4：无重大利空（业绩风险已反映，未出现突发利空）</li><li>检查项5：筹码健康（数据缺失，无法判断）</li><li>检查项6：PE估值合理（31.36倍偏高）</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-002361">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">神剑股份</div>
+              <div class="detail-code">002361</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">❌ 否</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">40/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥20.748</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：技术面未形成多头，基本面欠佳，暂不介入，等待均线修复或明确信号。</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：轻仓可继续持有观察MA20支撑，重仓建议逢反弹减仓至3成以下，防范破位风险。</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列（MA5<MA10，不满足）</li><li>检查项2：乖离率合理（-0.95%，安全）</li><li>检查项3：量能配合（缩量但换手率过高）</li><li>检查项4：无重大利空（近3日无新增）</li><li>检查项5：筹码健康（数据缺失）</li><li>检查项6：PE估值合理（负PE，极不合理）</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-600010">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">包钢股份</div>
+              <div class="detail-code">600010</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">❌ 否</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">25/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥2.728</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：观望，等待股价站上MA10（2.79元）且均线转多头再考虑入场。</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：逢反弹减仓，止损位放在MA20（2.80元）下方，若跌破2.60元则清仓。</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列 — 空头排列</li><li>检查项2：乖离率合理（-1.03%）</li><li>检查项3：量能配合 — 量比正常但成交量异常放大，需降权</li><li>检查项4：无重大利空 — 一季报亏损（虽超3日窗口，但为近期利空）</li><li>检查项5：筹码健康 — 数据缺失</li><li>检查项6：PE估值合理 — 市盈率为负，亏损状态</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-000980">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">众泰汽车</div>
+              <div class="detail-code">000980</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">❌ 否</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">40/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥2.222</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者：严格观望，不追涨停。等待股价回踩MA5（约2.22元）附近且均线形成多头排列后再考虑。</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者：涨停可暂持，但乖离率过大需警惕回撤。建议若次日无法继续封板或高开低走，应及时止盈/减仓。止损参考MA20（2.19元）。</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列（MA5<MA10，不满足）</li><li>检查项2：乖离率合理（13.41%>5%，危险）</li><li>检查项3：量能配合（放量但异常，不可靠）</li><li>检查项4：无重大利空（行业风险非公司直接利空）</li><li>检查项5：筹码健康（数据缺失）</li><li>检查项6：PE估值合理（-36.7为亏损，市净率388.6异常高）</li></ul>
+          </div>
+        </div>
+        <div class="detail-section" id="stock-001896">
+          <div class="detail-header" style="background:#9ca3af">
+            <div>
+              <div class="detail-title">豫能控股</div>
+              <div class="detail-code">001896</div>
+            </div>
+            <div>
+              <div class="detail-price">¥</div>
+              
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="one-liner">💡 </p>
+            <div class="kpi-grid">
+              <div class="kpi"><span class="kpi-label">多头排列</span><span class="kpi-value">❌ 否</span></div>
+              <div class="kpi"><span class="kpi-label">乖离率</span><span class="kpi-value"></span></div>
+              <div class="kpi"><span class="kpi-label">趋势强度</span><span class="kpi-value">25/100</span></div>
+              <div class="kpi"><span class="kpi-label">MA5</span><span class="kpi-value">¥16.208</span></div>
+            </div>
+            <div class="op-row"><span class="op-label">空仓者</span><span class="op-text">空仓者建议：观望，不参与下跌趋势，等待站稳MA20且放量回暖再考虑。</span></div><div class="op-row"><span class="op-label">持仓者</span><span class="op-text">持仓者建议：立即减仓或清仓，止损位设在MA20（15.48元）下方，今日已破位，后续反弹无力则果断离场。</span></div>
+            <ul class="checks-list"><li>检查项1：多头排列（MA5<MA10，不符合）</li><li>检查项2：乖离率合理（-5.97%超出5%但向下，允许反弹，但当前风险大）</li><li>检查项3：量能配合（放量下跌，不配合）</li><li>检查项4：无重大利空（一季报业绩下滑，利空）</li><li>检查项5：筹码健康（数据缺失）</li><li>检查项6：PE估值合理（动态PE 61.95，偏高）</li></ul>
+          </div>
+        </div>
+
+<div class="footer">
+  <p>数据来源：东方财富 · 腾讯财经</p>
+  <p>AI 分析：DeepSeek · 仅供参考不构成投资建议</p>
+  <p>Generated by <a href="https://github.com/ljc060422/daily_stock_analysis">daily_stock_analysis</a></p>
+</div>
+
+</body>
+</html>
