@@ -423,10 +423,9 @@ jobs:
           URL="https://ljc060422.github.io/daily_stock_analysis/"
           TITLE="📊 $(date +%m月%d日) 股票日报"
 
-          DESP="$(echo "$SUMMARY" | head -15)
-
----
-
+          SEP="----------------------------------------"
+          DESP="${SUMMARY}
+${SEP}
 📱 点击查看完整报告：
 ${URL}"
 
