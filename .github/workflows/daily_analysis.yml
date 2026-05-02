@@ -433,6 +433,9 @@ jobs:
           if [ -n "$TODAY_REPORT" ]; then
             python report_to_html.py "$TODAY_REPORT"
             cp "${TODAY_REPORT%.md}.html" reports/index.html
+            # Generate stocks.json + copy charts
+            python generate_stocks.py reports/stocks.json
+            cp -r reports/charts reports/ 2>/dev/null || true
             echo "✅ HTML报告已生成"
           else
             echo "⚠️ 未找到报告文件"
@@ -445,7 +448,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./reports
           publish_branch: gh-pages
-          keep_files: false
+          keep_files: true
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: 'Update stock report [skip ci]'
