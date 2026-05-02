@@ -318,7 +318,7 @@ JS = '''
                 var html = '';
                 for (var j = 0; j < results.length; j++) {
                     var r = results[j], tracked = TRACKED_SET[r.c];
-                    html += '<div class=\"search-item' + (tracked ? ' tracked' : '') + '\" onclick=\"showStockInfo(this)\" data-code=\"' + r.c + '\" data-name=\"' + r.n + '\" data-tracked=\"' + (tracked ? '1' : '0') + '\"><div><div>' + r.n + '</div><div class=\"si-code\">' + r.c + '</div></div>' + (tracked ? '<span class=\"si-badge\">已关注</span>' : '<span style=\"color:#64748b;font-size:11px\">未关注</span>') + '</div>';
+                    html += '<div class=\"search-item' + (tracked ? ' tracked' : '') + '\" onclick=\"window.showStockInfo(this)\" data-code=\"' + r.c + '\" data-name=\"' + r.n + '\" data-tracked=\"' + (tracked ? '1' : '0') + '\"><div><div>' + r.n + '</div><div class=\"si-code\">' + r.c + '</div></div>' + (tracked ? '<span class=\"si-badge\">已关注</span>' : '<span style=\"background:#6366f1;color:#fff;font-size:10px;padding:3px 8px;border-radius:8px;cursor:pointer\">➕ 关注</span>') + '</div>';
                 }
                 div.innerHTML = html;
             }
@@ -339,11 +339,11 @@ JS = '''
                 return;
             }
         }
-        // Not tracked: confirm before opening editor
-        var msg = name + ' (' + code + ') 未在关注列表中。\\n\\n点击确定前往 GitHub 编辑关注列表。';
-        if (confirm(msg)) {
-            window.open('https://github.com/ljc060422/daily_stock_analysis/edit/main/stock_list.txt', '_blank');
-        }
+        // Not tracked: open GitHub issue to add
+        var title = 'add:' + code + ' ' + name;
+        var body = '自动添加 ' + name + '(' + code + ') 到关注列表';
+        var url = 'https://github.com/ljc060422/daily_stock_analysis/issues/new?title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(body);
+        window.open(url, '_blank');
     };
 
     window.onSearchInput = function(el) {
