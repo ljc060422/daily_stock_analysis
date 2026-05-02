@@ -85,6 +85,21 @@ jobs:
         run: |
           mkdir -p data logs reports
       
+      - name: 合并股票列表
+        if: steps.check_tomorrow.outputs.SKIP != 'true'
+        run: |
+          FILE_LIST=$(grep -v '^#' stock_list.txt 2>/dev/null | grep -o '[0-9]\{6\}' | sort -u | tr '\n' ',' | sed 's/,$//')
+          if [ -n "$STOCK_LIST" ] && [ -n "$FILE_LIST" ]; then
+            STOCK_LIST="${STOCK_LIST},${FILE_LIST}"
+          elif [ -n "$FILE_LIST" ]; then
+            STOCK_LIST="${FILE_LIST}"
+          elif [ -z "$STOCK_LIST" ]; then
+            STOCK_LIST="600519"
+          fi
+          STOCK_LIST=$(echo "$STOCK_LIST" | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
+          echo "STOCK_LIST=${STOCK_LIST}" >> $GITHUB_ENV
+          echo "📊 最终股票列表: $STOCK_LIST"
+
       - name: 执行股票分析
         if: steps.check_tomorrow.outputs.SKIP != 'true'
         env:
@@ -290,7 +305,7 @@ jobs:
           # ==========================================
           # 自选股配置
           # ==========================================
-          STOCK_LIST: ${{ vars.STOCK_LIST || secrets.STOCK_LIST || '600519' }}
+          STOCK_LIST: ${{ vars.STOCK_LIST || secrets.STOCK_LIST || '' }}
           MARKET_REVIEW_REGION: ${{ vars.MARKET_REVIEW_REGION || secrets.MARKET_REVIEW_REGION || 'cn' }}
           
           # ==========================================

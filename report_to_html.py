@@ -259,6 +259,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .search-item .si-code{color:#64748b;font-size:11px}
 .search-item.tracked .si-badge{background:#10b981;color:#fff;font-size:10px;padding:2px 6px;border-radius:8px}
 .no-results{padding:16px;text-align:center;color:#64748b;font-size:13px}
+.edit-link{display:block;text-align:center;padding:8px;font-size:12px;color:#6366f1;text-decoration:none}
+.edit-link:active{color:#818cf8}
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
 .info-row{display:flex;justify-content:space-between;background:#0f172a;border-radius:6px;padding:8px 10px;font-size:12px}
 .info-row span:first-child{color:#64748b}
@@ -328,9 +330,6 @@ JS = '''
         var name = el.getAttribute('data-name');
         var code = el.getAttribute('data-code');
         var tracked = el.getAttribute('data-tracked') === '1';
-        var msg = name + ' (' + code + ')\\n\\n';
-        msg += tracked ? '已在当前关注列表中' : '未在关注列表中\\n如需添加，请在 GitHub Secrets 中更新 STOCK_LIST';
-        // Try to scroll to detail if tracked
         if (tracked) {
             var detail = document.getElementById('stock-' + code);
             if (detail) {
@@ -340,7 +339,11 @@ JS = '''
                 return;
             }
         }
-        alert(msg);
+        // Not tracked: confirm before opening editor
+        var msg = name + ' (' + code + ') 未在关注列表中。\\n\\n点击确定前往 GitHub 编辑关注列表。';
+        if (confirm(msg)) {
+            window.open('https://github.com/ljc060422/daily_stock_analysis/edit/main/stock_list.txt', '_blank');
+        }
     };
 
     window.onSearchInput = function(el) {
@@ -526,6 +529,7 @@ def generate_html(data):
 <div class="search-bar">
   <input type="text" id="search-input" class="search-input" placeholder="🔍 搜索股票（代码/名称/拼音）..." oninput="window.onSearchInput(this)" onkeydown="window.onSearchKey(this,event)" autocomplete="off">
   <div id="search-results" style="display:none"></div>
+  <a class="edit-link" href="https://github.com/ljc060422/daily_stock_analysis/edit/main/stock_list.txt" target="_blank">✏️ 编辑关注列表（每行一个代码）</a>
 </div>
 <div class="stats">
   <div class="stat buy"><div class="num">'''+str(summary.get("buy",0))+'''</div><div class="label">🟢 买入</div></div>
