@@ -259,12 +259,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .search-item .si-code{color:#64748b;font-size:11px}
 .search-item.tracked .si-badge{background:#10b981;color:#fff;font-size:10px;padding:2px 6px;border-radius:8px}
 .no-results{padding:16px;text-align:center;color:#64748b;font-size:13px}
-.edit-link{display:block;text-align:center;padding:8px;font-size:12px;color:#6366f1;text-decoration:none}
-.edit-link:active{color:#818cf8}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:12px 24px;border-radius:24px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90%;text-align:center}
-.toast.show{opacity:1}
-.toast.success{background:#10b981}
-.toast.error{background:#ef4444}
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
 .info-row{display:flex;justify-content:space-between;background:#0f172a;border-radius:6px;padding:8px 10px;font-size:12px}
 .info-row span:first-child{color:#64748b}
@@ -322,7 +316,7 @@ JS = '''
                 var html = '';
                 for (var j = 0; j < results.length; j++) {
                     var r = results[j], tracked = TRACKED_SET[r.c];
-                    html += '<div class=\"search-item' + (tracked ? ' tracked' : '') + '\" onclick=\"window.showStockInfo(this)\" data-code=\"' + r.c + '\" data-name=\"' + r.n + '\" data-tracked=\"' + (tracked ? '1' : '0') + '\"><div><div>' + r.n + '</div><div class=\"si-code\">' + r.c + '</div></div>' + (tracked ? '<span class=\"si-badge\">已关注</span>' : '<span style=\"background:#6366f1;color:#fff;font-size:10px;padding:3px 8px;border-radius:8px;cursor:pointer\">➕ 关注</span>') + '</div>';
+                    html += '<div class=\"search-item' + (tracked ? ' tracked' : '') + '\" onclick=\"showStockInfo(this)\" data-code=\"' + r.c + '\" data-name=\"' + r.n + '\" data-tracked=\"' + (tracked ? '1' : '0') + '\"><div><div>' + r.n + '</div><div class=\"si-code\">' + r.c + '</div></div>' + (tracked ? '<span class=\"si-badge\">已关注</span>' : '<span style=\"color:#64748b;font-size:11px\">未关注</span>') + '</div>';
                 }
                 div.innerHTML = html;
             }
@@ -334,6 +328,9 @@ JS = '''
         var name = el.getAttribute('data-name');
         var code = el.getAttribute('data-code');
         var tracked = el.getAttribute('data-tracked') === '1';
+        var msg = name + ' (' + code + ')\\n\\n';
+        msg += tracked ? '已在当前关注列表中' : '未在关注列表中\\n如需添加，请在 GitHub Secrets 中更新 STOCK_LIST';
+        // Try to scroll to detail if tracked
         if (tracked) {
             var detail = document.getElementById('stock-' + code);
             if (detail) {
@@ -343,44 +340,7 @@ JS = '''
                 return;
             }
         }
-        // Add stock via GitHub API
-        window._addStock(code, name, el);
-    };
-
-    window._addStock = async function(code, name, el) {
-        var toast = document.getElementById('toast');
-        toast.textContent = '添加中...';
-        toast.className = 'toast show';
-        try {
-            var url = 'https://api.github.com/repos/ljc060422/daily_stock_analysis/contents/stock_list.txt';
-            var resp = await fetch(url, {headers:{'Authorization':'Bearer '+GH_TOKEN,'Accept':'application/vnd.github+json'}});
-            var data = await resp.json();
-            var current = atob(data.content).trim().split('\n').filter(function(l){return l.match(/^\d{6}$/);});
-            if (current.indexOf(code) >= 0) {
-                toast.textContent = name+'('+code+') 已在关注列表中';
-                toast.className = 'toast show';
-            } else {
-                current.push(code);
-                var newContent = current.join('\n') + '\n';
-                var putResp = await fetch(url, {
-                    method:'PUT',
-                    headers:{'Authorization':'Bearer '+GH_TOKEN,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
-                    body:JSON.stringify({message:'add '+code+' '+name,content:btoa(newContent),sha:data.sha})
-                });
-                if (putResp.ok) {
-                    toast.textContent = '✅ '+name+'('+code+') 已添加！明天日报将包含此股票';
-                    toast.className = 'toast success show';
-                    TRACKED_SET[code] = true;
-                    if (el) { el.setAttribute('data-tracked','1'); el.querySelector('span').textContent = '已关注'; el.querySelector('span').className = 'si-badge'; el.querySelector('span').style.cssText = ''; }
-                } else {
-                    throw new Error('API error');
-                }
-            }
-        } catch(e) {
-            toast.textContent = '添加失败，请稍后重试';
-            toast.className = 'toast error show';
-        }
-        setTimeout(function(){ toast.className = 'toast'; }, 3000);
+        alert(msg);
     };
 
     window.onSearchInput = function(el) {
@@ -566,7 +526,6 @@ def generate_html(data):
 <div class="search-bar">
   <input type="text" id="search-input" class="search-input" placeholder="🔍 搜索股票（代码/名称/拼音）..." oninput="window.onSearchInput(this)" onkeydown="window.onSearchKey(this,event)" autocomplete="off">
   <div id="search-results" style="display:none"></div>
-  <a class="edit-link" href="https://github.com/ljc060422/daily_stock_analysis/edit/main/stock_list.txt" target="_blank">✏️ 编辑关注列表（每行一个代码）</a>
 </div>
 <div class="stats">
   <div class="stat buy"><div class="num">'''+str(summary.get("buy",0))+'''</div><div class="label">🟢 买入</div></div>
@@ -580,9 +539,7 @@ def generate_html(data):
   <p>数据来源：东方财富 · 腾讯财经 | AI：DeepSeek</p>
   <p>仅供参考，不构成投资建议</p>
 </div>
-<div id="toast" class="toast"></div>
 <script>
-var GH_TOKEN = '''' + os.environ.get('GH_PAT_TOKEN', '') + '''';
 var TRACKED_CODES = [''' + ','.join("'" + s.get('code','') + "'" for s in stocks_summary) + '''];
 ''' + JS + '''</script>
 </body>
