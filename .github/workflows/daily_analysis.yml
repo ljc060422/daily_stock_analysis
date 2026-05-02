@@ -3,7 +3,7 @@ name: 每日股票分析
 on:
   # 定时触发 - 每天北京时间 18:00 (UTC 10:00)
   schedule:
-    - cron: '0 10 * * 1-5'     # 周一到周五，UTC 10:00 = 北京时间 18:00
+    - cron: '0 10 * * 0-4'     # 周日至周四 UTC = 周一至周五北京，开盘前一天 18:00 运行
   
   # 手动触发
   workflow_dispatch:
@@ -43,26 +43,50 @@ jobs:
     steps:
       - name: 随机延迟（避免固定时间访问）
         run: sleep $((RANDOM % 60))  # 随机延迟0-60秒启动
-      
+
+      - name: 检查明日是否开盘
+        id: check_tomorrow
+        run: |
+          # 北京时间明天是周几（1=周一, 7=周日）
+          TOMORROW_DOW=$(TZ='Asia/Shanghai' date -d '+1 day' +%u)
+          echo "明日周${TOMORROW_DOW}"
+          if [ "$TOMORROW_DOW" -ge 6 ]; then
+            echo "SKIP=true" >> $GITHUB_OUTPUT
+            echo "⏭️ 明日周末休市，跳过分析"
+          else
+            echo "SKIP=false" >> $GITHUB_OUTPUT
+            echo "✅ 明日开盘，继续分析"
+          fi
+
+      - name: 跳过分析（明日休市）
+        if: steps.check_tomorrow.outputs.SKIP == 'true'
+        run: |
+          echo "⏭️ 明日休市，跳过本次分析"
+
       - name: 检出代码
+        if: steps.check_tomorrow.outputs.SKIP != 'true'
         uses: actions/checkout@v5
       
       - name: 设置 Python 环境
+        if: steps.check_tomorrow.outputs.SKIP != 'true'
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           cache: 'pip'
       
       - name: 安装依赖
+        if: steps.check_tomorrow.outputs.SKIP != 'true'
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
       
       - name: 创建必要目录
+        if: steps.check_tomorrow.outputs.SKIP != 'true'
         run: |
           mkdir -p data logs reports
       
       - name: 执行股票分析
+        if: steps.check_tomorrow.outputs.SKIP != 'true'
         env:
           # ==========================================
           # AI 配置

@@ -246,6 +246,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .chart-container{margin-bottom:12px;text-align:center;min-height:60px}
 .chart-container img{max-width:100%;border-radius:8px}
 .chart-loading{color:#64748b;font-size:12px;padding:20px}
+.chart-caption{font-size:13px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-align:center}
+.close-price-box{background:#0f172a;border-radius:8px;padding:12px;margin-bottom:14px;display:flex;justify-content:space-around;text-align:center}
+.close-price-item .cp-val{font-size:20px;font-weight:800}
+.close-price-item .cp-label{font-size:11px;color:#64748b;margin-top:2px}
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
 .info-row{display:flex;justify-content:space-between;background:#0f172a;border-radius:6px;padding:8px 10px;font-size:12px}
 .info-row span:first-child{color:#64748b}
@@ -410,8 +414,12 @@ def generate_html(data):
           </div>
           <div class="detail-body">
             '''+('<p class="one-liner">💡 '+html_escape(d.get("one_liner",""))+'</p>' if d.get("one_liner") else '')+'''
-            <div class="chart-container" id="kline-'''+code+'''"><div class="chart-loading">📊 加载K线图...</div></div>
-            <div class="chart-container" id="itraday-'''+code+'''"><div class="chart-loading">📈 加载分时图...</div></div>
+            <div class="close-price-box">
+              <div class="close-price-item"><div class="cp-val" style="color:'''+(("#10b981" if d.get("change_pct","-").startswith("+") else "#ef4444") if d.get("change_pct","-") not in ("-","") else "#94a3b8")+'''">'''+(d.get("close") or d.get("current_price") or "-")+'''</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:'''+(("#10b981" if d.get("change_pct","-").startswith("+") else "#ef4444") if d.get("change_pct","-") not in ("-","") else "#94a3b8")+'''">'''+(d.get("change_pct") or "-")+'''</div><div class="cp-label">涨跌幅</div></div>
+            </div>
+            <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-'''+code+'''"><div class="chart-loading">加载中...</div></div></div>
+            <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-'''+code+'''"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
             <div class="info-grid">'''+"\n".join(info_rows)+'''</div>
             '''+"\n".join(news_parts)+'''
