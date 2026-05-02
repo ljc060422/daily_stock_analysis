@@ -158,7 +158,7 @@ def parse_report(md_text):
         d["one_liner"] = ext(r"一句话决策[:：]\*\*(.+?)\n")
         d["trend_strength"] = ext(r"趋势强度[:：]\s*(\d+/\d+)")
         d["bullish"] = ext(r"多头排列[:：]\s*(.+?)\s*\|")
-        pm = re.search(r"\|\s*收盘\s*\|.*?\n\|[-\s|]+\n\|(.*?)\|", sec)
+        pm = re.search(r"\|\s*收盘\s*\|.*?\n\|[-\s|]+\n\|(.+)\|\s*\n", sec)
         if pm:
             cells = [c.strip() for c in pm.group(1).split("|")]
             if len(cells) >= 9:
@@ -250,6 +250,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .close-price-box{background:#0f172a;border-radius:8px;padding:12px;margin-bottom:14px;display:flex;justify-content:space-around;text-align:center}
 .close-price-item .cp-val{font-size:20px;font-weight:800}
 .close-price-item .cp-label{font-size:11px;color:#64748b;margin-top:2px}
+.search-bar{padding:10px 12px;position:sticky;top:0;z-index:100;background:#0f172a;border-bottom:1px solid #1e293b}
+.search-input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:14px;outline:none}
+.search-input:focus{border-color:#6366f1}
+.search-results{background:#1e293b;border-radius:10px;margin-top:6px;max-height:300px;overflow-y:auto}
+.search-item{padding:10px 14px;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:13px}
+.search-item:active{background:#334155}
+.search-item .si-code{color:#64748b;font-size:11px}
+.search-item.tracked .si-badge{background:#10b981;color:#fff;font-size:10px;padding:2px 6px;border-radius:8px}
+.no-results{padding:16px;text-align:center;color:#64748b;font-size:13px}
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
 .info-row{display:flex;justify-content:space-between;background:#0f172a;border-radius:6px;padding:8px 10px;font-size:12px}
 .info-row span:first-child{color:#64748b}
@@ -270,6 +279,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 '''
 
 JS = '''
+window._stocksJson = null;
+window._trackedCodes = new Set(TRACKED_CODES);
+window._loadStocks = async function() {
+    if (window._stocksJson) return window._stocksJson;
+    var resp = await fetch('stocks.json');
+    if (resp.ok) { window._stocksJson = await resp.json(); return window._stocksJson; }
+    return [];
+};
+window._searchTimeout = null;
+window._doSearch = async function(q) {
+    if (q.length < 1) { document.getElementById('search-results').innerHTML = ''; return; }
+    var stocks = await window._loadStocks();
+    var results = [];
+    var ql = q.toLowerCase();
+    for (var i = 0; i < stocks.length && results.length < 20; i++) {
+        var s = stocks[i];
+        if (s.c.indexOf(q) === 0 || s.n.indexOf(q) >= 0 || (s.p && s.p.indexOf(ql) >= 0)) {
+            results.push(s);
+        }
+    }
+    var html = '';
+    if (results.length === 0) {
+        html = '<div class="no-results">未找到匹配股票</div>';
+    } else {
+        for (var j = 0; j < results.length; j++) {
+            var r = results[j];
+            var tracked = window._trackedCodes.has(r.c);
+            html += '<div class="search-item' + (tracked ? ' tracked' : '') + '" onclick="alert(\'股票 ' + r.n + '(' + r.c + ')\\n' + (tracked ? '已在关注列表中' : '待添加至关注列表\\n请在 GitHub Secrets 中更新 STOCK_LIST') + '")"><div><div>' + r.n + '</div><div class="si-code">' + r.c + '</div></div>' + (tracked ? '<span class="si-badge">已关注</span>' : '<span style="color:#64748b;font-size:11px">未关注</span>') + '</div>';
+        }
+    }
+    document.getElementById('search-results').innerHTML = html;
+};
+window._onSearchInput = function(el) {
+    clearTimeout(window._searchTimeout);
+    window._searchTimeout = setTimeout(function() { window._doSearch(el.value.trim()); }, 200);
+};
 window._chartCache = {};
 window._loadChart = async function(code, type) {
     var key = code + '_' + type;
@@ -438,6 +483,10 @@ def generate_html(data):
 </head>
 <body>
 <div class="header"><h1>📊 股票日报</h1><div class="date">'''+data["date"]+'''</div></div>
+<div class="search-bar">
+  <input type="text" class="search-input" placeholder="🔍 搜索股票（代码/名称/拼音）..." oninput="window._onSearchInput(this)" onfocus="this.placeholder='输入代码或名称...'" onblur="this.placeholder='🔍 搜索股票（代码/名称/拼音）...'">
+  <div id="search-results"></div>
+</div>
 <div class="stats">
   <div class="stat buy"><div class="num">'''+str(summary.get("buy",0))+'''</div><div class="label">🟢 买入</div></div>
   <div class="stat hold"><div class="num">'''+str(summary.get("hold",0))+'''</div><div class="label">🟡 观望</div></div>
@@ -450,7 +499,9 @@ def generate_html(data):
   <p>数据来源：东方财富 · 腾讯财经 | AI：DeepSeek</p>
   <p>仅供参考，不构成投资建议</p>
 </div>
-<script>'''+JS+'''</script>
+<script>
+var TRACKED_CODES = [''' + ','.join("'" + s.get('code','') + "'" for s in stocks_summary) + '''];
+''' + JS + '''</script>
 </body>
 </html>'''
 
