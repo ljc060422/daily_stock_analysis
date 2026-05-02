@@ -425,6 +425,8 @@ jobs:
       
       - name: 生成移动端HTML报告
         if: always()
+        env:
+          GH_PAT_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           echo "🎨 生成移动端报告..."
           TODAY_REPORT=$(ls reports/report_*.md 2>/dev/null | head -1)
