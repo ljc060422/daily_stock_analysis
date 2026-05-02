@@ -560,7 +560,7 @@ var TRACKED_CODES = [''' + ','.join("'" + s.get('code','') + "'" for s in stocks
         }).catch(function(e){ toast.textContent = "添加失败，请稍后重试"; toast.className = "toast error show"; });
         setTimeout(function(){ toast.className = "toast"; }, 3000);
     };
-    // Fix search result badges via MutationObserver
+    // Fix search result badges + add click handlers via MutationObserver
     var sr = document.getElementById("search-results");
     if (sr) {
         var fixBadges = function() {
@@ -568,11 +568,30 @@ var TRACKED_CODES = [''' + ','.join("'" + s.get('code','') + "'" for s in stocks
             for (var i = 0; i < items.length; i++) {
                 var spans = items[i].querySelectorAll("span");
                 for (var j = 0; j < spans.length; j++) {
-                    if (spans[j].textContent === "未关注") {
-                        spans[j].textContent = "➕ 关注";
-                        spans[j].style.cssText = "background:#6366f1;color:#fff;font-size:10px;padding:3px 8px;border-radius:8px;cursor:pointer";
+                    var sp = spans[j];
+                    if (sp.textContent.trim() === "未关注") {
+                        sp.textContent = "➕ 关注";
+                        sp.style.cssText = "background:#6366f1;color:#fff;font-size:10px;padding:3px 8px;border-radius:8px;cursor:pointer";
                     }
                 }
+                // Override click: use our new showStockInfo
+                var el = items[i];
+                el.onclick = function() {
+                    var clicked = this;
+                    var name = clicked.getAttribute("data-name") || "";
+                    var code = clicked.getAttribute("data-code") || "";
+                    var tracked = clicked.getAttribute("data-tracked") === "1";
+                    if (tracked) {
+                        var d = document.getElementById("stock-" + code);
+                        if (d) {
+                            window.toggleDetail("stock-" + code);
+                            sr.style.display = "none";
+                            document.getElementById("search-input").value = "";
+                            return;
+                        }
+                    }
+                    window.showStockInfo(clicked);
+                };
             }
         };
         new MutationObserver(function(){ fixBadges(); }).observe(sr, {childList:true,subtree:true});
