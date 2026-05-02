@@ -75,82 +75,82 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 <body>
 <div class="header"><h1>📊 股票日报</h1><div class="date">2026-05-02</div></div>
 <div class="search-bar">
-  <input type="text" class="search-input" placeholder="🔍 搜索股票（代码/名称/拼音）..." oninput="window._onSearchInput(this)" onfocus="this.placeholder='输入代码或名称...'" onblur="this.placeholder='🔍 搜索股票（代码/名称/拼音）...'">
-  <div id="search-results"></div>
+  <input type="text" id="search-input" class="search-input" placeholder="🔍 搜索股票（代码/名称/拼音）..." oninput="window.onSearchInput(this)" onkeydown="window.onSearchKey(this,event)" autocomplete="off">
+  <div id="search-results" style="display:none"></div>
 </div>
 <div class="stats">
   <div class="stat buy"><div class="num">3</div><div class="label">🟢 买入</div></div>
   <div class="stat hold"><div class="num">8</div><div class="label">🟡 观望</div></div>
   <div class="stat sell"><div class="num">2</div><div class="label">🔴 卖出</div></div>
 </div>
-<div class="cards"><div class="stock-card" style="border-left:4px solid #10b981" onclick="toggleDetail('stock-000629')">
+<div class="cards"><div class="stock-card" style="border-left:4px solid #10b981" onclick="window.toggleDetail('stock-000629')">
           <div class="card-left"><div class="card-name">钒钛股份(000629)</div><div class="card-code">000629</div></div>
           <div class="card-center"><span class="badge" style="background:#10b981">买入</span></div>
           <div class="card-right"><div class="score" style="color:#10b981">79</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #10b981" onclick="toggleDetail('stock-002475')">
+<div class="stock-card" style="border-left:4px solid #10b981" onclick="window.toggleDetail('stock-002475')">
           <div class="card-left"><div class="card-name">立讯精密(002475)</div><div class="card-code">002475</div></div>
           <div class="card-center"><span class="badge" style="background:#10b981">买入</span></div>
           <div class="card-right"><div class="score" style="color:#10b981">77</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #10b981" onclick="toggleDetail('stock-601678')">
+<div class="stock-card" style="border-left:4px solid #10b981" onclick="window.toggleDetail('stock-601678')">
           <div class="card-left"><div class="card-name">滨化股份(601678)</div><div class="card-code">601678</div></div>
           <div class="card-center"><span class="badge" style="background:#10b981">买入</span></div>
           <div class="card-right"><div class="score" style="color:#10b981">68</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #eab308" onclick="toggleDetail('stock-600726')">
+<div class="stock-card" style="border-left:4px solid #eab308" onclick="window.toggleDetail('stock-600726')">
           <div class="card-left"><div class="card-name">华电能源(600726)</div><div class="card-code">600726</div></div>
           <div class="card-center"><span class="badge" style="background:#eab308">持有</span></div>
           <div class="card-right"><div class="score" style="color:#eab308">60</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #9ca3af" onclick="toggleDetail('stock-002709')">
+<div class="stock-card" style="border-left:4px solid #9ca3af" onclick="window.toggleDetail('stock-002709')">
           <div class="card-left"><div class="card-name">天赐材料(002709)</div><div class="card-code">002709</div></div>
           <div class="card-center"><span class="badge" style="background:#9ca3af">观望</span></div>
           <div class="card-right"><div class="score" style="color:#9ca3af">58</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #eab308" onclick="toggleDetail('stock-000601')">
+<div class="stock-card" style="border-left:4px solid #eab308" onclick="window.toggleDetail('stock-000601')">
           <div class="card-left"><div class="card-name">韶能股份(000601)</div><div class="card-code">000601</div></div>
           <div class="card-center"><span class="badge" style="background:#eab308">持有</span></div>
           <div class="card-right"><div class="score" style="color:#eab308">50</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #eab308" onclick="toggleDetail('stock-600497')">
+<div class="stock-card" style="border-left:4px solid #eab308" onclick="window.toggleDetail('stock-600497')">
           <div class="card-left"><div class="card-name">驰宏锌锗(600497)</div><div class="card-code">600497</div></div>
           <div class="card-center"><span class="badge" style="background:#eab308">持有</span></div>
           <div class="card-right"><div class="score" style="color:#eab308">50</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #eab308" onclick="toggleDetail('stock-002166')">
+<div class="stock-card" style="border-left:4px solid #eab308" onclick="window.toggleDetail('stock-002166')">
           <div class="card-left"><div class="card-name">莱茵生物(002166)</div><div class="card-code">002166</div></div>
           <div class="card-center"><span class="badge" style="background:#eab308">持有</span></div>
           <div class="card-right"><div class="score" style="color:#eab308">45</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #eab308" onclick="toggleDetail('stock-000630')">
+<div class="stock-card" style="border-left:4px solid #eab308" onclick="window.toggleDetail('stock-000630')">
           <div class="card-left"><div class="card-name">铜陵有色(000630)</div><div class="card-code">000630</div></div>
           <div class="card-center"><span class="badge" style="background:#eab308">持有</span></div>
           <div class="card-right"><div class="score" style="color:#eab308">45</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #eab308" onclick="toggleDetail('stock-002361')">
+<div class="stock-card" style="border-left:4px solid #eab308" onclick="window.toggleDetail('stock-002361')">
           <div class="card-left"><div class="card-name">神剑股份(002361)</div><div class="card-code">002361</div></div>
           <div class="card-center"><span class="badge" style="background:#eab308">持有</span></div>
           <div class="card-right"><div class="score" style="color:#eab308">42</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #ef4444" onclick="toggleDetail('stock-600010')">
+<div class="stock-card" style="border-left:4px solid #ef4444" onclick="window.toggleDetail('stock-600010')">
           <div class="card-left"><div class="card-name">包钢股份(600010)</div><div class="card-code">600010</div></div>
           <div class="card-center"><span class="badge" style="background:#ef4444">卖出</span></div>
           <div class="card-right"><div class="score" style="color:#ef4444">39</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #9ca3af" onclick="toggleDetail('stock-000980')">
+<div class="stock-card" style="border-left:4px solid #9ca3af" onclick="window.toggleDetail('stock-000980')">
           <div class="card-left"><div class="card-name">众泰汽车(000980)</div><div class="card-code">000980</div></div>
           <div class="card-center"><span class="badge" style="background:#9ca3af">观望</span></div>
           <div class="card-right"><div class="score" style="color:#9ca3af">35</div><div class="score-label">评分</div></div>
         </div>
-<div class="stock-card" style="border-left:4px solid #ef4444" onclick="toggleDetail('stock-001896')">
+<div class="stock-card" style="border-left:4px solid #ef4444" onclick="window.toggleDetail('stock-001896')">
           <div class="card-left"><div class="card-name">豫能控股(001896)</div><div class="card-code">001896</div></div>
           <div class="card-center"><span class="badge" style="background:#ef4444">卖出</span></div>
           <div class="card-right"><div class="score" style="color:#ef4444">25</div><div class="score-label">评分</div></div>
         </div></div>
 <div class="section-title" style="padding:20px 16px 8px;font-size:16px;font-weight:700">📋 个股详情（点击展开）</div>
 <div class="detail-section" id="stock-000629" style="display:none">
-          <div class="detail-header" style="background:#10b981" onclick="toggleDetail('stock-000629')">
+          <div class="detail-header" style="background:#10b981" onclick="window.toggleDetail('stock-000629')">
             <div>
               <div class="detail-title">钒钛股份</div>
               <div class="detail-code">000629</div>
@@ -197,7 +197,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-002475" style="display:none">
-          <div class="detail-header" style="background:#10b981" onclick="toggleDetail('stock-002475')">
+          <div class="detail-header" style="background:#10b981" onclick="window.toggleDetail('stock-002475')">
             <div>
               <div class="detail-title">立讯精密</div>
               <div class="detail-code">002475</div>
@@ -242,7 +242,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-601678" style="display:none">
-          <div class="detail-header" style="background:#10b981" onclick="toggleDetail('stock-601678')">
+          <div class="detail-header" style="background:#10b981" onclick="window.toggleDetail('stock-601678')">
             <div>
               <div class="detail-title">滨化股份</div>
               <div class="detail-code">601678</div>
@@ -287,7 +287,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-600726" style="display:none">
-          <div class="detail-header" style="background:#eab308" onclick="toggleDetail('stock-600726')">
+          <div class="detail-header" style="background:#eab308" onclick="window.toggleDetail('stock-600726')">
             <div>
               <div class="detail-title">华电能源</div>
               <div class="detail-code">600726</div>
@@ -333,7 +333,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-002709" style="display:none">
-          <div class="detail-header" style="background:#9ca3af" onclick="toggleDetail('stock-002709')">
+          <div class="detail-header" style="background:#9ca3af" onclick="window.toggleDetail('stock-002709')">
             <div>
               <div class="detail-title">天赐材料</div>
               <div class="detail-code">002709</div>
@@ -378,7 +378,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-000601" style="display:none">
-          <div class="detail-header" style="background:#eab308" onclick="toggleDetail('stock-000601')">
+          <div class="detail-header" style="background:#eab308" onclick="window.toggleDetail('stock-000601')">
             <div>
               <div class="detail-title">韶能股份</div>
               <div class="detail-code">000601</div>
@@ -423,7 +423,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-600497" style="display:none">
-          <div class="detail-header" style="background:#eab308" onclick="toggleDetail('stock-600497')">
+          <div class="detail-header" style="background:#eab308" onclick="window.toggleDetail('stock-600497')">
             <div>
               <div class="detail-title">驰宏锌锗</div>
               <div class="detail-code">600497</div>
@@ -466,7 +466,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-002166" style="display:none">
-          <div class="detail-header" style="background:#9ca3af" onclick="toggleDetail('stock-002166')">
+          <div class="detail-header" style="background:#9ca3af" onclick="window.toggleDetail('stock-002166')">
             <div>
               <div class="detail-title">莱茵生物</div>
               <div class="detail-code">002166</div>
@@ -507,7 +507,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-000630" style="display:none">
-          <div class="detail-header" style="background:#eab308" onclick="toggleDetail('stock-000630')">
+          <div class="detail-header" style="background:#eab308" onclick="window.toggleDetail('stock-000630')">
             <div>
               <div class="detail-title">铜陵有色</div>
               <div class="detail-code">000630</div>
@@ -552,7 +552,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-002361" style="display:none">
-          <div class="detail-header" style="background:#f97316" onclick="toggleDetail('stock-002361')">
+          <div class="detail-header" style="background:#f97316" onclick="window.toggleDetail('stock-002361')">
             <div>
               <div class="detail-title">神剑股份</div>
               <div class="detail-code">002361</div>
@@ -597,7 +597,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-600010" style="display:none">
-          <div class="detail-header" style="background:#ef4444" onclick="toggleDetail('stock-600010')">
+          <div class="detail-header" style="background:#ef4444" onclick="window.toggleDetail('stock-600010')">
             <div>
               <div class="detail-title">包钢股份</div>
               <div class="detail-code">600010</div>
@@ -641,7 +641,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-000980" style="display:none">
-          <div class="detail-header" style="background:#9ca3af" onclick="toggleDetail('stock-000980')">
+          <div class="detail-header" style="background:#9ca3af" onclick="window.toggleDetail('stock-000980')">
             <div>
               <div class="detail-title">众泰汽车</div>
               <div class="detail-code">000980</div>
@@ -683,7 +683,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           </div>
         </div>
 <div class="detail-section" id="stock-001896" style="display:none">
-          <div class="detail-header" style="background:#ef4444" onclick="toggleDetail('stock-001896')">
+          <div class="detail-header" style="background:#ef4444" onclick="window.toggleDetail('stock-001896')">
             <div>
               <div class="detail-title">豫能控股</div>
               <div class="detail-code">001896</div>
@@ -733,83 +733,123 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 <script>
 var TRACKED_CODES = ['000629','002475','601678','600726','002709','000601','600497','002166','000630','002361','600010','000980','001896'];
 
-window._stocksJson = null;
-window._trackedCodes = new Set(TRACKED_CODES);
-window._loadStocks = async function() {
-    if (window._stocksJson) return window._stocksJson;
-    var resp = await fetch('stocks.json');
-    if (resp.ok) { window._stocksJson = await resp.json(); return window._stocksJson; }
-    return [];
-};
-window._searchTimeout = null;
-window._doSearch = async function(q) {
-    if (q.length < 1) { document.getElementById('search-results').innerHTML = ''; return; }
-    var stocks = await window._loadStocks();
-    var results = [];
-    var ql = q.toLowerCase();
-    for (var i = 0; i < stocks.length && results.length < 20; i++) {
-        var s = stocks[i];
-        if (s.c.indexOf(q) === 0 || s.n.indexOf(q) >= 0 || (s.p && s.p.indexOf(ql) >= 0)) {
-            results.push(s);
-        }
+(function() {
+    var TRACKED_SET = {};
+    for (var i = 0; i < TRACKED_CODES.length; i++) { TRACKED_SET[TRACKED_CODES[i]] = true; }
+    var stockCache = null;
+    var searchTimer = null;
+    var chartCache = {};
+
+    function loadStocks(cb) {
+        if (stockCache) { cb(stockCache); return; }
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'stocks.json', true);
+        xhr.onload = function() {
+            if (xhr.status === 200) { stockCache = JSON.parse(xhr.responseText); cb(stockCache); }
+            else { cb([]); }
+        };
+        xhr.onerror = function() { cb([]); };
+        xhr.send();
     }
-    var html = '';
-    if (results.length === 0) {
-        html = '<div class="no-results">未找到匹配股票</div>';
-    } else {
-        for (var j = 0; j < results.length; j++) {
-            var r = results[j];
-            var tracked = window._trackedCodes.has(r.c);
-            html += '<div class="search-item' + (tracked ? ' tracked' : '') + '" onclick="alert('股票 ' + r.n + '(' + r.c + ')\n' + (tracked ? '已在关注列表中' : '待添加至关注列表\n请在 GitHub Secrets 中更新 STOCK_LIST') + '")"><div><div>' + r.n + '</div><div class="si-code">' + r.c + '</div></div>' + (tracked ? '<span class="si-badge">已关注</span>' : '<span style="color:#64748b;font-size:11px">未关注</span>') + '</div>';
-        }
-    }
-    document.getElementById('search-results').innerHTML = html;
-};
-window._onSearchInput = function(el) {
-    clearTimeout(window._searchTimeout);
-    window._searchTimeout = setTimeout(function() { window._doSearch(el.value.trim()); }, 200);
-};
-window._chartCache = {};
-window._loadChart = async function(code, type) {
-    var key = code + '_' + type;
-    if (window._chartCache[key]) return window._chartCache[key];
-    var resp = await fetch('charts/' + code + '_' + type + '.png');
-    if (resp.ok) {
-        var blob = await resp.blob();
-        var url = URL.createObjectURL(blob);
-        window._chartCache[key] = url;
-        return url;
-    }
-    return null;
-};
-window._renderCharts = function(code) {
-    var kd = document.getElementById('kline-' + code);
-    var id = document.getElementById('itraday-' + code);
-    if (kd && !kd.querySelector('img')) {
-        window._loadChart(code, 'kline').then(function(u) {
-            kd.innerHTML = u ? '<img src="'+u+'" alt="K线">' : '<div class="chart-loading">暂无K线数据</div>';
+
+    function doSearch(q) {
+        var div = document.getElementById('search-results');
+        if (!div) return;
+        if (q.length < 1) { div.innerHTML = ''; div.style.display = 'none'; return; }
+        loadStocks(function(stocks) {
+            var results = [], ql = q.toLowerCase();
+            for (var i = 0; i < stocks.length && results.length < 20; i++) {
+                var s = stocks[i];
+                if (s.c.indexOf(q) === 0 || s.n.indexOf(q) >= 0 || (s.p && s.p.indexOf(ql) >= 0)) {
+                    results.push(s);
+                }
+            }
+            if (results.length === 0) {
+                div.innerHTML = '<div class="no-results">未找到匹配股票</div>';
+            } else {
+                var html = '';
+                for (var j = 0; j < results.length; j++) {
+                    var r = results[j], tracked = TRACKED_SET[r.c];
+                    html += '<div class="search-item' + (tracked ? ' tracked' : '') + '" onclick="showStockInfo(this)" data-code="' + r.c + '" data-name="' + r.n + '" data-tracked="' + (tracked ? '1' : '0') + '"><div><div>' + r.n + '</div><div class="si-code">' + r.c + '</div></div>' + (tracked ? '<span class="si-badge">已关注</span>' : '<span style="color:#64748b;font-size:11px">未关注</span>') + '</div>';
+                }
+                div.innerHTML = html;
+            }
+            div.style.display = 'block';
         });
     }
-    if (id && !id.querySelector('img')) {
-        window._loadChart(code, 'intraday').then(function(u) {
-            id.innerHTML = u ? '<img src="'+u+'" alt="分时">' : '<div class="chart-loading">暂无分时数据</div>';
-        });
+
+    window.showStockInfo = function(el) {
+        var name = el.getAttribute('data-name');
+        var code = el.getAttribute('data-code');
+        var tracked = el.getAttribute('data-tracked') === '1';
+        var msg = name + ' (' + code + ')\n\n';
+        msg += tracked ? '已在当前关注列表中' : '未在关注列表中\n如需添加，请在 GitHub Secrets 中更新 STOCK_LIST';
+        // Try to scroll to detail if tracked
+        if (tracked) {
+            var detail = document.getElementById('stock-' + code);
+            if (detail) {
+                window.toggleDetail('stock-' + code);
+                document.getElementById('search-results').style.display = 'none';
+                document.getElementById('search-input').value = '';
+                return;
+            }
+        }
+        alert(msg);
+    };
+
+    window.onSearchInput = function(el) {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function() { doSearch(el.value.trim()); }, 200);
+    };
+
+    window.onSearchKey = function(el, evt) {
+        if (evt.key === 'Enter') {
+            clearTimeout(searchTimer);
+            doSearch(el.value.trim());
+        }
+    };
+
+    function loadChart(code, type, cb) {
+        var key = code + '_' + type;
+        if (chartCache[key]) { cb(chartCache[key]); return; }
+        var img = new Image();
+        img.onload = function() { chartCache[key] = img.src; cb(img.src); };
+        img.onerror = function() { cb(null); };
+        img.src = 'charts/' + code + '_' + type + '.png';
     }
-};
-function toggleDetail(id) {
-    var el = document.getElementById(id);
-    var icon = document.getElementById('icon-' + id);
-    var code = id.replace('stock-', '');
-    if (el.style.display === 'none') {
-        el.style.display = 'block';
-        if (icon) icon.classList.add('open');
-        window._renderCharts(code);
-        el.scrollIntoView({behavior:'smooth',block:'center'});
-    } else {
-        el.style.display = 'none';
-        if (icon) icon.classList.remove('open');
+
+    function renderCharts(code) {
+        var kd = document.getElementById('kline-' + code);
+        if (kd && !kd.querySelector('img')) {
+            loadChart(code, 'kline', function(u) {
+                kd.innerHTML = u ? '<img src="' + u + '" alt="K线">' : '<div class="chart-loading">暂无K线数据</div>';
+            });
+        }
+        var idEl = document.getElementById('itraday-' + code);
+        if (idEl && !idEl.querySelector('img')) {
+            loadChart(code, 'intraday', function(u) {
+                idEl.innerHTML = u ? '<img src="' + u + '" alt="分时">' : '<div class="chart-loading">暂无分时数据</div>';
+            });
+        }
     }
-}
+
+    window.toggleDetail = function(id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var icon = document.getElementById('icon-' + id);
+        var code = id.replace('stock-', '');
+        var nowHidden = (el.style.display === 'none' || el.style.display === '');
+        if (nowHidden) {
+            el.style.display = 'block';
+            if (icon) icon.classList.add('open');
+            renderCharts(code);
+            setTimeout(function() { el.scrollIntoView({behavior:'smooth',block:'center'}); }, 100);
+        } else {
+            el.style.display = 'none';
+            if (icon) icon.classList.remove('open');
+        }
+    };
+})();
 </script>
 </body>
 </html>
