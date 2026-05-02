@@ -44,6 +44,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .close-price-box{background:#0f172a;border-radius:8px;padding:12px;margin-bottom:14px;display:flex;justify-content:space-around;text-align:center}
 .close-price-item .cp-val{font-size:20px;font-weight:800}
 .close-price-item .cp-label{font-size:11px;color:#64748b;margin-top:2px}
+.search-bar{padding:10px 12px;position:sticky;top:0;z-index:100;background:#0f172a;border-bottom:1px solid #1e293b}
+.search-input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:14px;outline:none}
+.search-input:focus{border-color:#6366f1}
+.search-results{background:#1e293b;border-radius:10px;margin-top:6px;max-height:300px;overflow-y:auto}
+.search-item{padding:10px 14px;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:13px}
+.search-item:active{background:#334155}
+.search-item .si-code{color:#64748b;font-size:11px}
+.search-item.tracked .si-badge{background:#10b981;color:#fff;font-size:10px;padding:2px 6px;border-radius:8px}
+.no-results{padding:16px;text-align:center;color:#64748b;font-size:13px}
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
 .info-row{display:flex;justify-content:space-between;background:#0f172a;border-radius:6px;padding:8px 10px;font-size:12px}
 .info-row span:first-child{color:#64748b}
@@ -65,6 +74,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 </head>
 <body>
 <div class="header"><h1>📊 股票日报</h1><div class="date">2026-05-02</div></div>
+<div class="search-bar">
+  <input type="text" class="search-input" placeholder="🔍 搜索股票（代码/名称/拼音）..." oninput="window._onSearchInput(this)" onfocus="this.placeholder='输入代码或名称...'" onblur="this.placeholder='🔍 搜索股票（代码/名称/拼音）...'">
+  <div id="search-results"></div>
+</div>
 <div class="stats">
   <div class="stat buy"><div class="num">3</div><div class="label">🟢 买入</div></div>
   <div class="stat hold"><div class="num">8</div><div class="label">🟡 观望</div></div>
@@ -151,13 +164,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">3.64</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">-1.36%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-000629"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-000629"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>3.636</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>-1.36%</span></div>
+<div class="info-row"><span>MA5</span><span>3.636</span></div>
 <div class="info-row"><span>MA10</span><span>3.563</span></div>
 <div class="info-row"><span>MA20</span><span>3.455</span></div>
 <div class="info-row"><span>多头排列</span><span>✅ 是</span></div>
@@ -197,13 +211,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">67.00</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">-2.39%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-002475"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-002475"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>68.698</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>-2.39%</span></div>
+<div class="info-row"><span>MA5</span><span>68.698</span></div>
 <div class="info-row"><span>MA10</span><span>67.052</span></div>
 <div class="info-row"><span>MA20</span><span>61.006</span></div>
 <div class="info-row"><span>多头排列</span><span>MA5(68.70) &gt;</span></div>
@@ -241,13 +256,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">5.35</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">0.94%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-601678"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-601678"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>5.228</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>0.94%</span></div>
+<div class="info-row"><span>MA5</span><span>5.228</span></div>
 <div class="info-row"><span>MA10</span><span>5.158</span></div>
 <div class="info-row"><span>MA20</span><span>5.099</span></div>
 <div class="info-row"><span>多头排列</span><span>✅ 是</span></div>
@@ -285,13 +301,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">6.59</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">-7.18%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-600726"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-600726"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>6.578</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>-7.18%</span></div>
+<div class="info-row"><span>MA5</span><span>6.578</span></div>
 <div class="info-row"><span>MA10</span><span>5.667</span></div>
 <div class="info-row"><span>MA20</span><span>5.285</span></div>
 <div class="info-row"><span>多头排列</span><span>✅ 是</span></div>
@@ -330,13 +347,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">60.51</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">2.01%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-002709"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-002709"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>56.29</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>2.01%</span></div>
+<div class="info-row"><span>MA5</span><span>56.29</span></div>
 <div class="info-row"><span>MA10</span><span>53.27</span></div>
 <div class="info-row"><span>MA20</span><span>49.525</span></div>
 <div class="info-row"><span>多头排列</span><span>✅ 是</span></div>
@@ -374,13 +392,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">6.57</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">-2.23%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-000601"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-000601"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>6.77</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>-2.23%</span></div>
+<div class="info-row"><span>MA5</span><span>6.77</span></div>
 <div class="info-row"><span>MA10</span><span>6.91</span></div>
 <div class="info-row"><span>MA20</span><span>6.714</span></div>
 <div class="info-row"><span>多头排列</span><span>❌ 否</span></div>
@@ -418,13 +437,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">8.98</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">-0.99%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-600497"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-600497"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>8.982</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>-0.99%</span></div>
+<div class="info-row"><span>MA5</span><span>8.982</span></div>
 <div class="info-row"><span>MA10</span><span>9.056</span></div>
 <div class="info-row"><span>MA20</span><span>8.5995</span></div>
 <div class="info-row"><span>多头排列</span><span>❌ 否</span></div>
@@ -460,13 +480,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">8.78</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">2.21%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-002166"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-002166"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>8.652</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>2.21%</span></div>
+<div class="info-row"><span>MA5</span><span>8.652</span></div>
 <div class="info-row"><span>MA10</span><span>8.735</span></div>
 <div class="info-row"><span>MA20</span><span>8.917</span></div>
 <div class="info-row"><span>多头排列</span><span>❌ 否</span></div>
@@ -500,13 +521,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">6.15</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">-2.84%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-000630"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-000630"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>6.26</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>-2.84%</span></div>
+<div class="info-row"><span>MA5</span><span>6.26</span></div>
 <div class="info-row"><span>MA10</span><span>6.353</span></div>
 <div class="info-row"><span>MA20</span><span>6.2235</span></div>
 <div class="info-row"><span>多头排列</span><span>❌ 否</span></div>
@@ -544,13 +566,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">20.55</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">2.49%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-002361"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-002361"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>20.748</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>2.49%</span></div>
+<div class="info-row"><span>MA5</span><span>20.748</span></div>
 <div class="info-row"><span>MA10</span><span>21.245</span></div>
 <div class="info-row"><span>MA20</span><span>19.088</span></div>
 <div class="info-row"><span>多头排列</span><span>❌ 否</span></div>
@@ -588,13 +611,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">2.70</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">-2.17%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-600010"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-600010"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>2.728</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>-2.17%</span></div>
+<div class="info-row"><span>MA5</span><span>2.728</span></div>
 <div class="info-row"><span>MA10</span><span>2.792</span></div>
 <div class="info-row"><span>MA20</span><span>2.803</span></div>
 <div class="info-row"><span>多头排列</span><span>❌ 否</span></div>
@@ -631,13 +655,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">2.52</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">10.04%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-000980"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-000980"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>2.222</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>10.04%</span></div>
+<div class="info-row"><span>MA5</span><span>2.222</span></div>
 <div class="info-row"><span>MA10</span><span>2.233</span></div>
 <div class="info-row"><span>MA20</span><span>2.1875</span></div>
 <div class="info-row"><span>多头排列</span><span>❌ 否</span></div>
@@ -672,13 +697,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
           <div class="detail-body">
             
             <div class="close-price-box">
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">上次收盘价</div></div>
-              <div class="close-price-item"><div class="cp-val" style="color:#94a3b8">-</div><div class="cp-label">涨跌幅</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">15.24</div><div class="cp-label">上次收盘价</div></div>
+              <div class="close-price-item"><div class="cp-val" style="color:#ef4444">-9.98%</div><div class="cp-label">涨跌幅</div></div>
             </div>
             <div class="chart-container"><div class="chart-caption">📊 30日K线图（MA5/10/20/60）</div><div id="kline-001896"><div class="chart-loading">加载中...</div></div></div>
             <div class="chart-container"><div class="chart-caption">📈 上次交易日分时图</div><div id="itraday-001896"><div class="chart-loading">加载中...</div></div></div>
             <div class="section-title">📊 关键指标</div>
-            <div class="info-grid"><div class="info-row"><span>MA5</span><span>16.208</span></div>
+            <div class="info-grid"><div class="info-row"><span>涨跌幅</span><span>-9.98%</span></div>
+<div class="info-row"><span>MA5</span><span>16.208</span></div>
 <div class="info-row"><span>MA10</span><span>16.948</span></div>
 <div class="info-row"><span>MA20</span><span>15.4775</span></div>
 <div class="info-row"><span>多头排列</span><span>❌ 否</span></div>
@@ -705,6 +731,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   <p>仅供参考，不构成投资建议</p>
 </div>
 <script>
+var TRACKED_CODES = ['000629','002475','601678','600726','002709','000601','600497','002166','000630','002361','600010','000980','001896'];
+
+window._stocksJson = null;
+window._trackedCodes = new Set(TRACKED_CODES);
+window._loadStocks = async function() {
+    if (window._stocksJson) return window._stocksJson;
+    var resp = await fetch('stocks.json');
+    if (resp.ok) { window._stocksJson = await resp.json(); return window._stocksJson; }
+    return [];
+};
+window._searchTimeout = null;
+window._doSearch = async function(q) {
+    if (q.length < 1) { document.getElementById('search-results').innerHTML = ''; return; }
+    var stocks = await window._loadStocks();
+    var results = [];
+    var ql = q.toLowerCase();
+    for (var i = 0; i < stocks.length && results.length < 20; i++) {
+        var s = stocks[i];
+        if (s.c.indexOf(q) === 0 || s.n.indexOf(q) >= 0 || (s.p && s.p.indexOf(ql) >= 0)) {
+            results.push(s);
+        }
+    }
+    var html = '';
+    if (results.length === 0) {
+        html = '<div class="no-results">未找到匹配股票</div>';
+    } else {
+        for (var j = 0; j < results.length; j++) {
+            var r = results[j];
+            var tracked = window._trackedCodes.has(r.c);
+            html += '<div class="search-item' + (tracked ? ' tracked' : '') + '" onclick="alert('股票 ' + r.n + '(' + r.c + ')\n' + (tracked ? '已在关注列表中' : '待添加至关注列表\n请在 GitHub Secrets 中更新 STOCK_LIST') + '")"><div><div>' + r.n + '</div><div class="si-code">' + r.c + '</div></div>' + (tracked ? '<span class="si-badge">已关注</span>' : '<span style="color:#64748b;font-size:11px">未关注</span>') + '</div>';
+        }
+    }
+    document.getElementById('search-results').innerHTML = html;
+};
+window._onSearchInput = function(el) {
+    clearTimeout(window._searchTimeout);
+    window._searchTimeout = setTimeout(function() { window._doSearch(el.value.trim()); }, 200);
+};
 window._chartCache = {};
 window._loadChart = async function(code, type) {
     var key = code + '_' + type;
