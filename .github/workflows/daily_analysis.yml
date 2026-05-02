@@ -28,6 +28,12 @@ concurrency:
   group: stock-analysis
   cancel-in-progress: false
 
+# Pages 部署权限
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   analyze:
     runs-on: ubuntu-latest
@@ -377,6 +383,31 @@ jobs:
             logs/
           retention-days: 30
       
+      - name: 生成移动端HTML报告
+        if: always()
+        run: |
+          echo "🎨 生成移动端报告..."
+          TODAY_REPORT=$(ls reports/report_*.md 2>/dev/null | head -1)
+          if [ -n "$TODAY_REPORT" ]; then
+            python report_to_html.py "$TODAY_REPORT"
+            cp "${TODAY_REPORT%.md}.html" reports/index.html
+            echo "✅ HTML报告已生成"
+          else
+            echo "⚠️ 未找到报告文件"
+          fi
+
+      - name: 部署到GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./reports
+          publish_branch: gh-pages
+          keep_files: false
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Update stock report [skip ci]'
+
       - name: 显示运行结果
         if: always()
         run: |
@@ -391,6 +422,7 @@ jobs:
             echo "⚠️ 未生成报告文件"
           fi
           echo ""
+          echo "📱 移动端报告: https://ljc060422.github.io/daily_stock_analysis/"
           if [ -f "logs/stock_analysis_$(date +%Y%m%d).log" ]; then
             echo "📜 最近日志（最后 30 行）:"
             tail -30 logs/stock_analysis_*.log 2>/dev/null || echo "无日志"
