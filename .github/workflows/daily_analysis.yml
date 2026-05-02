@@ -255,7 +255,8 @@ jobs:
           ASTRBOT_TOKEN: ${{ secrets.ASTRBOT_TOKEN }}
 
           # 方式十一：Server酱3
-          SERVERCHAN3_SENDKEY: ${{ secrets.SERVERCHAN3_SENDKEY }}
+          # Server酱由下方的干净通知步骤发送
+          # SERVERCHAN3_SENDKEY: ${{ secrets.SERVERCHAN3_SENDKEY }}
 
           # 方式十二：Slack
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -407,6 +408,34 @@ jobs:
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: 'Update stock report [skip ci]'
+
+      - name: 发送清爽微信通知
+        if: always()
+        env:
+          SCT_KEY: ${{ secrets.SERVERCHAN3_SENDKEY }}
+        run: |
+          echo "📱 发送微信通知..."
+          TODAY_REPORT=$(ls reports/report_*.md 2>/dev/null | head -1)
+
+          # Extract summary
+          SUMMARY=$(grep -E "共分析|🟢|🟡|🔴|⚪" "$TODAY_REPORT" 2>/dev/null | head -20 | sed 's/^#* *//g')
+
+          URL="https://ljc060422.github.io/daily_stock_analysis/"
+          TITLE="📊 $(date +%m月%d日) 股票日报"
+
+          DESP="$(echo "$SUMMARY" | head -15)
+
+---
+
+📱 点击查看完整报告：
+${URL}"
+
+          curl -s -X POST "https://sctapi.ftqq.com/${SCT_KEY}.send" \
+            -d "title=${TITLE}" \
+            --data-urlencode "desp=${DESP}"
+
+          echo ""
+          echo "✅ 微信通知已发送"
 
       - name: 显示运行结果
         if: always()
