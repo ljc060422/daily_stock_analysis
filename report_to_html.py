@@ -595,7 +595,7 @@ if __name__ == "__main__":
         f.write(html)
 
     # Copy add_stock.js
-    src_js = os.path.join(os.path.dirname(os.path.abspath(__file__)), "reports", "add_stock.js")
+    src_js = os.path.join(os.path.dirname(os.path.abspath(__file__)), "add_stock.js")
     if os.path.exists(src_js):
         dst_js = os.path.join(base_dir, "add_stock.js")
         with open(src_js, 'r', encoding='utf-8') as fsrc:
