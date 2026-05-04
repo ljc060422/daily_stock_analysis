@@ -521,7 +521,7 @@ def generate_html(data):
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes">
 <title>股票日报 '''+data["date"]+'''</title>
 <style>'''+CSS+'''</style>
 </head>

@@ -1,9 +1,9 @@
 name: 每日股票分析
 
 on:
-  # 定时触发 - 每天北京时间 18:00 (UTC 10:00)
+  # 定时触发 - 交易日北京时间 07:00 (UTC 23:00)
   schedule:
-    - cron: '0 10 * * 0-4'     # 周日至周四 UTC = 周一至周五北京，开盘前一天 18:00 运行
+    - cron: '0 23 * * 0-4'     # 周日至周四 UTC = 周一至周五北京，交易日 07:00 运行
   
   # 手动触发
   workflow_dispatch:
@@ -44,49 +44,70 @@ jobs:
       - name: 随机延迟（避免固定时间访问）
         run: sleep $((RANDOM % 60))  # 随机延迟0-60秒启动
 
-      - name: 检查明日是否开盘
-        id: check_tomorrow
+      - name: 检查今日是否开盘
+        id: check_trading_day
         run: |
-          # 北京时间明天是周几（1=周一, 7=周日）
-          TOMORROW_DOW=$(TZ='Asia/Shanghai' date -d '+1 day' +%u)
-          echo "明日周${TOMORROW_DOW}"
-          if [ "$TOMORROW_DOW" -ge 6 ]; then
+          # 周末快速过滤
+          TODAY_DOW=$(TZ='Asia/Shanghai' date +%u)
+          if [ "$TODAY_DOW" -ge 6 ]; then
             echo "SKIP=true" >> $GITHUB_OUTPUT
-            echo "⏭️ 明日周末休市，跳过分析"
+            echo "⏭️ 今日周末休市，跳过分析"
+            exit 0
+          fi
+          # akshare 交易日历精确判断（含节假日）
+          pip install -q akshare 2>/dev/null
+          IS_TRADE=$(python3 << 'PYEOF'
+          import akshare as ak
+          from datetime import date
+          today = date.today().strftime('%Y%m%d')
+          try:
+              cal = ak.tool_trade_date_hist_sina()
+              trade_dates = set(cal['trade_date'].astype(str).values)
+              print('yes' if today in trade_dates else 'no')
+          except:
+              print('unknown')
+          PYEOF
+          )
+          if [ "$IS_TRADE" = "no" ]; then
+            echo "SKIP=true" >> $GITHUB_OUTPUT
+            echo "⏭️ 今日非交易日（节假日），跳过分析"
+          elif [ "$IS_TRADE" = "unknown" ]; then
+            echo "⚠️ 交易日历查询失败，默认继续运行"
+            echo "SKIP=false" >> $GITHUB_OUTPUT
           else
             echo "SKIP=false" >> $GITHUB_OUTPUT
-            echo "✅ 明日开盘，继续分析"
+            echo "✅ 今日开盘，继续分析"
           fi
 
-      - name: 跳过分析（明日休市）
-        if: steps.check_tomorrow.outputs.SKIP == 'true'
+      - name: 跳过分析（今日休市）
+        if: steps.check_trading_day.outputs.SKIP == 'true'
         run: |
-          echo "⏭️ 明日休市，跳过本次分析"
+          echo "⏭️ 今日休市，跳过本次分析"
 
       - name: 检出代码
-        if: steps.check_tomorrow.outputs.SKIP != 'true'
+        if: steps.check_trading_day.outputs.SKIP != 'true'
         uses: actions/checkout@v5
       
       - name: 设置 Python 环境
-        if: steps.check_tomorrow.outputs.SKIP != 'true'
+        if: steps.check_trading_day.outputs.SKIP != 'true'
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           cache: 'pip'
       
       - name: 安装依赖
-        if: steps.check_tomorrow.outputs.SKIP != 'true'
+        if: steps.check_trading_day.outputs.SKIP != 'true'
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
       
       - name: 创建必要目录
-        if: steps.check_tomorrow.outputs.SKIP != 'true'
+        if: steps.check_trading_day.outputs.SKIP != 'true'
         run: |
           mkdir -p data logs reports
       
       - name: 合并股票列表
-        if: steps.check_tomorrow.outputs.SKIP != 'true'
+        if: steps.check_trading_day.outputs.SKIP != 'true'
         run: |
           FILE_LIST=$(grep -v '^#' stock_list.txt 2>/dev/null | grep -o '[0-9]\{6\}' | sort -u | tr '\n' ',' | sed 's/,$//')
           if [ -n "$STOCK_LIST" ] && [ -n "$FILE_LIST" ]; then
@@ -101,7 +122,7 @@ jobs:
           echo "📊 最终股票列表: $STOCK_LIST"
 
       - name: 执行股票分析
-        if: steps.check_tomorrow.outputs.SKIP != 'true'
+        if: steps.check_trading_day.outputs.SKIP != 'true'
         env:
           # ==========================================
           # AI 配置
@@ -415,7 +436,7 @@ jobs:
       
       - name: 上传分析报告
         uses: actions/upload-artifact@v6
-        if: always()
+        if: steps.check_trading_day.outputs.SKIP != 'true'
         with:
           name: analysis-reports-${{ github.run_number }}
           path: |
@@ -424,7 +445,7 @@ jobs:
           retention-days: 30
       
       - name: 生成移动端HTML报告
-        if: always()
+        if: steps.check_trading_day.outputs.SKIP != 'true'
         env:
           GH_PAT_TOKEN: ${{ secrets.GH_PAT }}
         run: |
@@ -435,14 +456,13 @@ jobs:
             cp "${TODAY_REPORT%.md}.html" reports/index.html
             # Generate stocks.json + copy charts
             python generate_stocks.py reports/stocks.json
-            cp -r reports/charts reports/ 2>/dev/null || true
             echo "✅ HTML报告已生成"
           else
             echo "⚠️ 未找到报告文件"
           fi
 
       - name: 部署到GitHub Pages
-        if: always()
+        if: steps.check_trading_day.outputs.SKIP != 'true'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -454,12 +474,16 @@ jobs:
           commit_message: 'Update stock report [skip ci]'
 
       - name: 发送清爽微信通知
-        if: always()
+        if: steps.check_trading_day.outputs.SKIP != 'true'
         env:
           SCT_KEY: ${{ secrets.SERVERCHAN3_SENDKEY }}
         run: |
           echo "📱 发送微信通知..."
           TODAY_REPORT=$(ls reports/report_*.md 2>/dev/null | head -1)
+          if [ -z "$TODAY_REPORT" ]; then
+            echo "⚠️ 无报告文件，跳过通知"
+            exit 0
+          fi
 
           # Extract summary
           SUMMARY=$(grep -E "共分析|🟢|🟡|🔴|⚪" "$TODAY_REPORT" 2>/dev/null | head -20 | sed 's/^#* *//g')
@@ -467,7 +491,7 @@ jobs:
           URL="https://ljc060422.github.io/daily_stock_analysis/"
           TITLE="📊 $(date +%m月%d日) 股票日报"
 
-          DESP=$(printf '%s\n\n📱 点击查看完整报告：\n%s' "$SUMMARY" "$URL")
+          DESP=$(printf '%s\n\n📱 点击查看完整报告：\n%s\n（如无法打开请尝试 WiFi 或开启代理）' "$SUMMARY" "$URL")
           curl -s -X POST "https://sctapi.ftqq.com/${SCT_KEY}.send" -d "title=${TITLE}" --data-urlencode "desp=${DESP}"
 
           echo ""
