@@ -47,6 +47,12 @@ jobs:
       - name: 检查今日是否开盘
         id: check_trading_day
         run: |
+          # 强制运行模式：跳过交易日检查
+          if [ "${{ github.event.inputs.force_run }}" = "true" ]; then
+            echo "SKIP=false" >> $GITHUB_OUTPUT
+            echo "⚡ 强制运行模式，跳过交易日检查"
+            exit 0
+          fi
           # 周末快速过滤
           TODAY_DOW=$(TZ='Asia/Shanghai' date +%u)
           if [ "$TODAY_DOW" -ge 6 ]; then
