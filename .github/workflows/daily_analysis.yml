@@ -459,8 +459,7 @@ jobs:
           TODAY_REPORT=$(ls reports/report_*.md 2>/dev/null | head -1)
           if [ -n "$TODAY_REPORT" ]; then
             python report_to_html.py "$TODAY_REPORT"
-            cp "${TODAY_REPORT%.md}.html" reports/index.html
-            # Generate stocks.json + copy charts
+            # report_to_html.py 已直接将 HTML 写入 reports/index.html
             python generate_stocks.py reports/stocks.json
             echo "✅ HTML报告已生成"
           else
