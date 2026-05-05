@@ -490,13 +490,19 @@ jobs:
             exit 0
           fi
 
-          # Extract summary
-          SUMMARY=$(grep -E "共分析|🟢|🟡|🔴|⚪" "$TODAY_REPORT" 2>/dev/null | head -20 | sed 's/^#* *//g')
+          # Extract stock summary + Top20 section
+          STOCK_SUMMARY=$(grep -E "共分析|🟢|🟡|🔴|⚪" "$TODAY_REPORT" 2>/dev/null | head -20 | sed 's/^#* *//g')
+
+          # Extract Top20 section if exists
+          TOP20_SECTION=""
+          if grep -q "每日精选 Top 20" "$TODAY_REPORT" 2>/dev/null; then
+            TOP20_SECTION=$(sed -n '/## 🔥 每日精选 Top 20/,$ p' "$TODAY_REPORT" 2>/dev/null | head -30)
+          fi
 
           URL="https://ljc060422.github.io/daily_stock_analysis/"
           TITLE="📊 $(date +%m月%d日) 股票日报"
 
-          DESP=$(printf '%s\n\n📱 点击查看完整报告：\n%s\n（如无法打开请尝试 WiFi 或开启代理）' "$SUMMARY" "$URL")
+          DESP="${STOCK_SUMMARY}\n\n---\n${TOP20_SECTION}\n\n📱 完整报告：${URL}\n（如无法打开请尝试 WiFi 或开启代理）"
           curl -s -X POST "https://sctapi.ftqq.com/${SCT_KEY}.send" -d "title=${TITLE}" --data-urlencode "desp=${DESP}"
 
           echo ""
