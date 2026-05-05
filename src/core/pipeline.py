@@ -1783,6 +1783,12 @@ class StockAnalysisPipeline:
 
             picker = AIPicker()
             top20, _ = picker.pick_top20(top100)
+            # 补全股票名称
+            idx = top100.set_index("code", drop=False)
+            for item in top20:
+                code = item.get("code", "")
+                if code in idx.index:
+                    item["name"] = str(idx.loc[code]["name"])
             logger.info(f"[Top20] 精选完成: {len(top20)} 只")
             return top20
         except Exception as e:
