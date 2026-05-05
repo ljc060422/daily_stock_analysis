@@ -241,12 +241,13 @@ class NotificationService(
         results: List[AnalysisResult],
         report_type: Any,
         report_date: Optional[str] = None,
+        top20_results: Optional[List[Dict]] = None,
     ) -> str:
         """Generate the aggregate report content used by merge/save/push paths."""
         normalized_type = self._normalize_report_type(report_type)
         if normalized_type == ReportType.BRIEF:
-            return self.generate_brief_report(results, report_date=report_date)
-        return self.generate_dashboard_report(results, report_date=report_date)
+            return self.generate_brief_report(results, report_date=report_date, top20_results=top20_results)
+        return self.generate_dashboard_report(results, report_date=report_date, top20_results=top20_results)
 
     def _collect_models_used(self, results: List[AnalysisResult]) -> List[str]:
         models: List[str] = []
@@ -769,7 +770,8 @@ class NotificationService(
     def generate_dashboard_report(
         self,
         results: List[AnalysisResult],
-        report_date: Optional[str] = None
+        report_date: Optional[str] = None,
+        top20_results: Optional[List[Dict]] = None,
     ) -> str:
         """
         生成决策仪表盘格式的日报（详细版）
@@ -1058,6 +1060,10 @@ class NotificationService(
                     "",
                 ])
         
+        # 🔥 每日精选 Top 20
+        if top20_results:
+            report_lines.extend(self._generate_top20_section(top20_results))
+
         # 底部（去除免责声明）
         report_lines.extend([
             "",
@@ -1066,6 +1072,57 @@ class NotificationService(
         
         return "\n".join(report_lines)
     
+    @staticmethod
+    def _generate_top20_section(top20: List[Dict]) -> List[str]:
+        """生成 🔥 每日精选 Top 20 的 Markdown 章节。"""
+        lines = [
+            "",
+            "---",
+            "",
+            "## 🔥 每日精选 Top 20",
+            "",
+            "> 从全市场 5000+ A 股中量化+AI 精选，仅供参考，不构成投资建议",
+            "",
+        ]
+
+        # 按 AI 评分分两组
+        strong = [s for s in top20 if s.get("signal") == "买入" and s.get("score", 0) >= 80]
+        watch = [s for s in top20 if s not in strong]
+
+        if strong:
+            lines.extend([
+                "### 🟢 强烈关注",
+                "",
+                "| # | 股票 | AI评分 | 信号 | 推荐理由 |",
+                "|---|------|--------|------|---------|",
+            ])
+            for i, s in enumerate(strong[:15], 1):
+                code = s.get("code", "")
+                name = s.get("name", "")
+                score = s.get("score", 0)
+                signal = s.get("signal", "")
+                reason = s.get("reason", "")
+                lines.append(f"| {i} | {name}({code}) | {score} | {signal} | {reason} |")
+            lines.append("")
+
+        if watch:
+            lines.extend([
+                "### 🟡 持续跟踪",
+                "",
+                "| # | 股票 | AI评分 | 信号 | 推荐理由 |",
+                "|---|------|--------|------|---------|",
+            ])
+            for i, s in enumerate(watch[:15], len(strong) + 1):
+                code = s.get("code", "")
+                name = s.get("name", "")
+                score = s.get("score", 0)
+                signal = s.get("signal", "")
+                reason = s.get("reason", "")
+                lines.append(f"| {i} | {name}({code}) | {score} | {signal} | {reason} |")
+            lines.append("")
+
+        return lines
+
     def generate_wechat_dashboard(self, results: List[AnalysisResult]) -> str:
         """
         生成企业微信决策仪表盘精简版（控制在4000字符内）
@@ -1310,6 +1367,7 @@ class NotificationService(
         self,
         results: List[AnalysisResult],
         report_date: Optional[str] = None,
+        top20_results: Optional[List[Dict]] = None,
     ) -> str:
         """
         Generate brief report (3-5 sentences per stock) for mobile/push.
@@ -1362,6 +1420,9 @@ class NotificationService(
                 f"{labels['score_label']} {r.sentiment_score} | {one}"
             )
         lines.append("")
+        # 🔥 每日精选 Top 20
+        if top20_results:
+            lines.extend(NotificationService._generate_top20_section(top20_results))
         lines.append(f"*{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*")
         return "\n".join(lines)
 

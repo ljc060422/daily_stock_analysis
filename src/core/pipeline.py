@@ -12,6 +12,7 @@ A股自选股智能分析系统 - 核心分析流水线
 """
 
 import logging
+import os
 import threading
 import time
 import uuid
@@ -1487,10 +1488,15 @@ class StockAnalysisPipeline:
         
         logger.info("===== 分析完成 =====")
         logger.info(f"成功: {success_count}, 失败: {fail_count}, 耗时: {elapsed_time:.2f} 秒")
-        
+
+        # 🔥 每日精选 Top 20 — 全市场量化+AI 筛选
+        top20_results = None
+        if not dry_run and os.getenv("TOP20_ENABLED", "true").lower() not in ("0", "false", "no"):
+            top20_results = self._run_top20_screener()
+
         # 保存报告到本地文件（无论是否推送通知都保存）
         if results and not dry_run:
-            self._save_local_report(results, report_type)
+            self._save_local_report(results, report_type, top20_results=top20_results)
 
         # 发送通知（单股推送模式下跳过汇总推送，避免重复）
         if results and send_notification and not dry_run:
@@ -1549,10 +1555,11 @@ class StockAnalysisPipeline:
         self,
         results: List[AnalysisResult],
         report_type: ReportType = ReportType.SIMPLE,
+        top20_results: Optional[List[Dict]] = None,
     ) -> None:
         """保存分析报告到本地文件（与通知推送解耦）"""
         try:
-            report = self._generate_aggregate_report(results, report_type)
+            report = self._generate_aggregate_report(results, report_type, top20_results=top20_results)
             filepath = self.notifier.save_report_to_file(report)
             logger.info(f"决策仪表盘日报已保存: {filepath}")
         except Exception as e:
@@ -1761,15 +1768,37 @@ class StockAnalysisPipeline:
             import traceback
             logger.error(f"发送通知失败: {e}\n{traceback.format_exc()}")
 
+    def _run_top20_screener(self) -> Optional[List[Dict]]:
+        """全市场扫描+AI精选 Top 20，失败时静默降级。"""
+        try:
+            from src.screener.quant_scorer import QuantScorer
+            from src.screener.ai_picker import AIPicker
+
+            logger.info("[Top20] 开始全市场扫描 …")
+            scorer = QuantScorer()
+            top100 = scorer.scan_and_score(100)
+            if top100.empty:
+                logger.warning("[Top20] 量化打分返回空")
+                return None
+
+            picker = AIPicker()
+            top20, _ = picker.pick_top20(top100)
+            logger.info(f"[Top20] 精选完成: {len(top20)} 只")
+            return top20
+        except Exception as e:
+            logger.warning(f"[Top20] 筛选失败(降级跳过): {e}")
+            return None
+
     def _generate_aggregate_report(
         self,
         results: List[AnalysisResult],
         report_type: ReportType,
+        top20_results: Optional[List[Dict]] = None,
     ) -> str:
         """Generate aggregate report with backward-compatible notifier fallback."""
         generator = getattr(self.notifier, "generate_aggregate_report", None)
         if callable(generator):
-            return generator(results, report_type)
+            return generator(results, report_type, top20_results=top20_results)
         if report_type == ReportType.BRIEF and hasattr(self.notifier, "generate_brief_report"):
             return self.notifier.generate_brief_report(results)
-        return self.notifier.generate_dashboard_report(results)
+        return self.notifier.generate_dashboard_report(results, top20_results=top20_results)
